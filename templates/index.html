@@ -1,19 +1,160 @@
 <!DOCTYPE html>
 <html>
+<head>
+    <title>BASTIAN :: MEMORIA CENTRAL</title>
+</head>
+<!-- Fondo negro profundo, texto verde terminal, enlaces magenta radiactivo -->
+<body bgcolor="#000000" text="#00FF00" link="#FF00FF" vlink="#FFFF00">
 
-<title>
+    <!-- Banda sonora de fondo -->
+    <audio src="/static/audio/hallowed_be_thy_name.wav" autoplay loop controls></audio>
 
-    'hola mundo'
-</title>
-<center>
-<pre>
-Este texto está centrado
-usando solo HTML puro y antiguo.
-</pre>
-</center>
+    <center>
+        <pre>
+ __________________________________________________________________________
+/                                                                          \
+|   ██████╗  █████╗ ███████╗████████╗██╗ █████╗ ███╗   ██╗                 |
+|   ██╔══██╗██╔══██╗██╔════╝╚══██╔══╝██║██╔══██╗████╗  ██║                 |
+|   ██████╔╝███████║███████╗   ██║   ██║███████║██╔██╗ ██║                 |
+|   ██╔══██╗██╔══██║╚════██║   ██║   ██║██╔══██║██║╚██╗██║                 |
+|   ██████╔╝██║  ██║███████║   ██║   ██║██║  ██║██║ ╚████║                 |
+|   ╚═════╝ ╚═╝  ╚═╝╚══════╝   ╚═╝   ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝                 |
+\__________________________________________________________________________/
+        </pre>
+        <h2><marquee scrollamount="20" width="70%">[ SISTEMA EN LÍNEA ] - CURANILAHUE Y EL MUNDO - [ SISTEMA EN LÍNEA ]</marquee></h2>
+    </center>
 
+    <hr size="5" color="#FF00FF" width="95%">
 
+    <table border="3" cellpadding="10" bordercolor="#00FF00" align="center" width="90%">
+        <tr>
+            <!-- COLUMNA IZQUIERDA: PERFIL Y CV -->
+            <td width="40%" valign="top">
+                <center><h3>>> DIAGNÓSTICO DEL AUTOR <<</h3></center>
+                <tt>
+                    <b>NOMBRE:</b> Bastian<br>
+                    <b>BASE:</b> Curanilahue / Concepción<br>
+                    <b>COMBUSTIBLE:</b> 100% Plant-Based<br>
+                    <b>HARDWARE FÍSICO:</b> Adidas Galaxy 6 (Talla 9.5 US, la única que sirve).<br>
+                </tt>
 
+                <hr size="1" color="#00FF00">
+                
+                <center><h3>>> CURRÍCULUM Y PORTAFOLIO <<</h3></center>
+                <ul>
+                    <li>
+                        <b>IgnisEdge (2026 - Presente)</b><br>
+                        <i>Startup / Tesis.</i> Detección temprana de incendios. Drones autónomos + sensores IoT. 
+                        [<a href="/demos/ignisedge">VER DEMO</a>]
+                    </li>
+                    <br>
+                    <li>
+                        <b>Investigación Edge Computing (USM)</b><br>
+                        Entrenamiento de modelos TinyML para discriminar gases con el sensor Bosch BME688. 
+                    </li>
+                    <br>
+                    <li>
+                        <b>Práctica Profesional (Inicios 2026)</b><br>
+                        Procesamiento de datos a gran escala, optimización CPU vs GPU (Pandas vs cuDF).
+                    </li>
+                    <br>
+                    <li>
+                        <b>Desarrollador Backend Junior (Verano 2024)</b><br>
+                        Arquitectura en Django y MySQL.
+                    </li>
+                    <br>
+                    <li>
+                        <b>Soporte Técnico - Hospital de Curanilahue</b><br>
+                        Reparación de hardware y asistencia a usuarios en entorno crítico.
+                    </li>
+                </ul>
+            </td>
 
+            <!-- COLUMNA DERECHA: RECUERDOS, FOTOS Y ESCRITOS -->
+            <td width="60%" valign="top">
+                
+                <center><h3>>> VOLCADO DE MEMORIA (ESCRITOS) <<</h3></center>
+                
+                <table border="1" bordercolor="#FF00FF" cellpadding="5" width="100%">
+                    <tr>
+                        <td>
+                            <tt><b>[RECUERDO] Expedición Río de Janeiro</b></tt><br>
+                            Siete noches en Brasil (Feb 2026). Playas, exploración urbana y la eterna búsqueda de comida vegetariana en Copacabana. <a href="/recuerdos/rio_2026.html">Leer bitácora -></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <tt><b>[TUTORIAL] Resurrección de Algodón</b></tt><br>
+                            Cómo teñir unos pantalones Levi's desteñidos usando anilina negra, sal y una olla hirviendo. La obsolescencia programada es una mentira. <a href="/escritos/levis_dye.html">Ver proceso -></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <tt><b>[ANÁLISIS] El "No quiero un café solo"</b></tt><br>
+                            Reflexiones psicológicas sobre el enfoque y el crecimiento personal. No es sobre la bebida, es sobre la mentalidad. <a href="/escritos/cafe_solo.html">Leer manifiesto -></a>
+                        </td>
+                    </tr>
+                </table>
+
+                <br>
+                <center><h3>>> REGISTRO VISUAL (FOTOS) <<</h3></center>
+                
+                <!-- Galería con scroll horizontal nativo usando nowrap y overflow -->
+                <div style="overflow-x: auto; white-space: nowrap;">
+                    <table border="5" bordercolor="#FFFF00" bgcolor="#111111" cellpadding="10">
+                        <tr>
+                            <!-- FOTO 1 -->
+                            <td align="center">
+                                <img src="/static/img/gato_coletero.jpg" width="200" height="150" alt="Gato"><br>
+                                <tt>Amenaza detectada: Gato vs Coletero</tt>
+                            </td>
+                            <!-- FOTO 2 -->
+                            <td align="center">
+                                <img src="/static/img/mochila_trekking.jpg" width="200" height="150" alt="Gear"><br>
+                                <tt>Setup Gorpcore (Saco Deuter Exosphere)</tt>
+                            </td>
+                            <!-- FOTO 3 -->
+                            <td align="center">
+                                <img src="/static/img/nonguen.jpg" width="200" height="150" alt="Nonguen"><br>
+                                <tt>Desconexión en P.N. Nonguén</tt>
+                            </td>
+                            <!-- FOTO 4 -->
+                            <td align="center">
+                                <img src="/static/img/juegos_mesa.jpg" width="200" height="150" alt="Juegos"><br>
+                                <tt>Tarde de lógica y juegos con Sofía</tt>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+            </td>
+        </tr>
+    </table>
+
+    <hr size="5" color="#FF00FF" width="95%">
+
+    <center>
+        <h3>>> CONSUMO CULTURAL RECIENTE <<</h3>
+        <table border="2" bordercolor="#00FF00" cellpadding="8">
+            <tr>
+                <th><tt>ANIMACIÓN JAPONESA</tt></th>
+                <th><tt>FRECUENCIAS SONORAS</tt></th>
+                <th><tt>APOYO LOCAL</tt></th>
+            </tr>
+            <tr align="center">
+                <td>Solo Leveling<br>Jujutsu Kaisen</td>
+                <td>Bruce Dickinson (Solo)<br>Heavy Metal Clásico</td>
+                <td>Comprando cuchuflíes<br>a mis hermanas</td>
+            </tr>
+        </table>
+        
+        <br><br>
+        <marquee direction="left" scrollamount="10" width="50%">
+            <tt>--- EL CÓDIGO LIMPIO ES UN MITO. LA EFICIENCIA ES LA ÚNICA VERDAD ---</tt>
+        </marquee>
+        <br>
+        <a href="#top"><font size="+2" color="#FFFF00">[ RETURN 0; ]</font></a>
+    </center>
+
+</body>
 </html>
-
