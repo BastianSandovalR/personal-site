@@ -26,12 +26,14 @@ def leer_index(request:Request):
     day_quote=lista_filas[numero_aleatorio]
     user_agent=request.headers.get("user-agent")
     diccionario=dict(request.headers)
-    print(diccionario['sec-ch-ua-mobile'][1])
+    print(diccionario)
+    #$print(diccionario['sec-ch-ua-mobile'][1])
     if diccionario['sec-ch-ua-mobile'][1]=='0':
         return templates.TemplateResponse(name='index_pc.html',context={'request':request,'cita':day_quote})
-    else:
+    elif diccionario['sec-ch-ua-mobile'][1]=='1':
         return  templates.TemplateResponse(name='index_phone.html',context={'request':request,'cita':day_quote})
-
+    else:
+        return templates.TemplateResponse(name='index_pc.html',context={'request':request,'cita':day_quote})
 @app.get('/contact')
 def read_contact(request:Request):
     return templates.TemplateResponse(name='contact.html',request=request)
