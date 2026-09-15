@@ -25,9 +25,12 @@ def leer_index(request:Request):
     lista_filas=df.to_dict(orient='records')
     day_quote=lista_filas[numero_aleatorio]
     user_agent=request.headers.get("user-agent")
-    print(dict(request.headers))
-
-    return templates.TemplateResponse(name='index.html',context={'request':request,'cita':day_quote})
+    diccionario=dict(request.headers)
+    print(diccionario['sec-ch-ua-mobile'][1])
+    if diccionario['sec-ch-ua-mobile'][1]=='0':
+        return templates.TemplateResponse(name='index_pc.html',context={'request':request,'cita':day_quote})
+    else:
+        return  templates.TemplateResponse(name='index_phone.html',context={'request':request,'cita':day_quote})
 
 @app.get('/contact')
 def read_contact(request:Request):
