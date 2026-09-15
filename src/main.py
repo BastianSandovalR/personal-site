@@ -24,7 +24,9 @@ def leer_index(request:Request):
        # print (linea)
     lista_filas=df.to_dict(orient='records')
     day_quote=lista_filas[numero_aleatorio]
-    
+    user_agent=request.headers.get("user-agent")
+    print(dict(request.headers))
+
     return templates.TemplateResponse(name='index.html',context={'request':request,'cita':day_quote})
 
 @app.get('/contact')
