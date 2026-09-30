@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Bastian Sandoval | Perfil profesional{% endblock %}
+{% block descripcion %}Bastian Sandoval: estudiante de último año de Ingeniería Civil en Informática (USM). Datos, Edge Computing y TinyML. Proyectos, experiencia y contacto.{% endblock %}
+
+{#
+    Página para reclutadores: sin marquesinas, sin música, sin chistes de terminal.
+    Se imprime bien (Ctrl+P > Guardar como PDF).
+    Para editar el contenido, cambia las listas de abajo.
+#}
+
+{% set proyectos = [
+    {
+        'nombre': 'IgnisEdge',
+        'periodo': '2026 - presente',
+        'estado': 'En desarrollo',
+        'texto': 'Sistema de detección temprana de incendios forestales que integra drones autónomos y redes IoT de largo alcance.',
+        'stack': 'Jetson, LoRa, Pixhawk',
+        'link': None,
+    },
+    {
+        'nombre': 'Memoria de título: TinyML para gases de combustión',
+        'periodo': '2026',
+        'estado': 'En curso',
+        'texto': 'Entrenamiento de modelos que corren en el edge para discriminar gases de combustión a partir de sensores Bosch BME688.',
+        'stack': 'TinyML, Bosch BME688, Python',
+        'link': None,
+    },
+    {
+        'nombre': 'Craic: app para aprender inglés',
+        'periodo': '2026',
+        'estado': 'En producción',
+        'texto': 'Aplicación web multiusuario con repetición espaciada (FSRS-5), audio neuronal generado en el servidor, práctica de diálogos y modo offline como PWA. Diseñada, desarrollada y desplegada de punta a punta.',
+        'stack': 'Python, FastAPI, Podman, Oracle Cloud, Tailscale',
+        'link': None,
+    },
+    {
+        'nombre': 'Este sitio',
+        'periodo': '2026',
+        'estado': 'En línea',
+        'texto': 'Blog y perfil servidos solo con HTML: sin CSS ni JavaScript. La versión móvil la arma el servidor. Incluye un panel de publicación con subida de fotos que las reduce y les borra los metadatos de ubicación.',
+        'stack': 'Python, FastAPI, Jinja2, Pillow, Podman',
+        'link': None,
+    },
+] %}
+
+{% set experiencia = [
+    ('2026', 'Práctica profesional', 'Universidad Técnica Federico Santa María', 'Procesamiento de datos y análisis de rendimiento CPU vs GPU usando Pandas y cuDF.'),
+    ('2024', 'Desarrollador backend junior', '', 'Desarrollo de aplicaciones en Django con bases de datos MySQL.'),
+    ('Anterior', 'Soporte técnico', 'Hospital de Curanilahue', 'Gestión y reparación de hardware, y soporte a usuarios.'),
+] %}
+
+{% set stack = [
+    ('Ingesta y orquestación', 'Apache Kafka, Apache Airflow, sensores IoT'),
+    ('Persistencia', 'PostgreSQL, PostGIS, MySQL, Neo4j; en el edge: DuckDB, LanceDB, SQLite'),
+    ('Procesamiento y analítica', 'Apache Spark, Pandas, Polars, cuDF (aceleración GPU)'),
+    ('Modelado e inferencia', 'YOLO, TensorRT, TinyML, TensorFlow, ML clásico (regresión y clasificación)'),
+    ('Despliegue', 'Docker, Podman, Linux (Fedora), FastAPI, Django, redes LoRa'),
+] %}
+
+{# Fila de dos columnas en PC (etiqueta | contenido) que en celular se apila #}
+{% macro fila(etiqueta, detalle='') %}
+    {% if movil %}
+    <tr><td valign="top">
+        <tt><font size="2" color="{{ c.tenue }}">{{ etiqueta }}{% if detalle %}, {{ detalle | lower }}{% endif %}</font></tt><br>
+        {{ caller() }}
+    </td></tr>
+    {% else %}
+    <tr>
+        <td width="150" valign="top"><tt><font size="2" color="{{ c.tenue }}">{{ etiqueta }}{% if detalle %}<br>{{ detalle }}{% endif %}</font></tt></td>
+        <td valign="top">{{ caller() }}</td>
+    </tr>
+    {% endif %}
+{% endmacro %}
+
+{% macro seccion(titulo, ancla='') %}
+    <br>
+    <h2{% if ancla %} id="{{ ancla }}"{% endif %}><font color="{{ c.titulo }}">{{ titulo }}</font></h2>
+    <hr size="2" noshade color="{{ c.titulo }}">
+{% endmacro %}
+
+{% block contenido %}
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+<tr><td align="center">
+<table width="{{ '100%' if movil else '720' }}" cellpadding="0" cellspacing="0" border="0">
+<tr><td align="left">
+
+    <!-- ENCABEZADO -->
+    <br>
+    <font size="{{ 6 if movil else 7 }}"><b>Bastian Sandoval</b></font><br>
+    <font size="{{ 3 if movil else 4 }}">
+        Estudiante de último año de Ingeniería Civil en Informática (USM).<br>
+        Trabajo con datos, Edge Computing y TinyML.
+    </font>
+    <br><br>
+
+    <table width="100%" cellpadding="{{ 4 if movil else 3 }}" cellspacing="0" border="0">
+        {% call fila('Ubicación') %}Región del Biobío, Chile{% endcall %}
+        {% call fila('Disponibilidad') %}Reubicación internacional después de titularme (~2027){% endcall %}
+        {% call fila('Correo') %}<a href="mailto:bastiansandoval762@gmail.com">bastiansandoval762@gmail.com</a>{% endcall %}
+        {% call fila('GitHub') %}<a href="https://github.com/BastianSandovalR" rel="noopener noreferrer">github.com/BastianSandovalR</a>{% endcall %}
+        {% if cv_pdf %}
+        {% call fila('Currículum') %}<a href="/static/cv.pdf" download>Descargar CV en PDF</a>{% endcall %}
+        {% endif %}
+    </table>
+
+    {{ seccion('Perfil') }}
+    <p>
+        Me interesa la tecnología que toca el mundo físico: modelos que corren en el borde con recursos
+        mínimos, pipelines de datos eficientes y sistemas que se pueden desplegar y mantener sin sorpresas.
+        Mi criterio de trabajo es hacer lo justo y necesario, bien hecho, y que no explote en producción.
+    </p>
+
+    {{ seccion('Proyectos') }}
+    <table width="100%" cellpadding="{{ 6 if movil else 8 }}" cellspacing="0" border="0">
+    {% for p in proyectos %}
+        {% call fila(p.periodo, p.estado) %}
+            <b><font size="4">{{ p.nombre }}</font></b><br>
+            {{ p.texto }}<br>
+            <tt><font size="2" color="{{ c.tenue }}">{{ p.stack }}</font></tt>
+            {% if p.link %}<br><a href="{{ p.link }}">Ver proyecto</a>{% endif %}
+        {% endcall %}
+    {% endfor %}
+    </table>
+
+    {{ seccion('Experiencia') }}
+    <table width="100%" cellpadding="{{ 6 if movil else 8 }}" cellspacing="0" border="0">
+    {% for anio, cargo, lugar, texto in experiencia %}
+        {% call fila(anio) %}
+            <b>{{ cargo }}</b>{% if lugar %}, {{ lugar }}{% endif %}<br>
+            {{ texto }}
+        {% endcall %}
+    {% endfor %}
+    </table>
+
+    {{ seccion('Formación') }}
+    <table width="100%" cellpadding="{{ 6 if movil else 8 }}" cellspacing="0" border="0">
+        {% call fila('En curso') %}
+            <b>Ingeniería Civil en Informática</b>, Universidad Técnica Federico Santa María, Concepción<br>
+            Último año. Memoria de título en TinyML.
+        {% endcall %}
+    </table>
+
+    {{ seccion('Stack técnico') }}
+    <p><font size="2" color="{{ c.tenue }}">Ordenado como las etapas de un pipeline de datos, desde que el dato nace en un sensor hasta que el modelo está en producción.</font></p>
+    <table width="100%" cellpadding="{{ 6 if movil else 8 }}" cellspacing="0" border="0">
+    {% for capa, herramientas in stack %}
+        {% call fila(loop.index ~ '. ' ~ capa) %}{{ herramientas }}{% endcall %}
+    {% endfor %}
+    </table>
+
+    {{ seccion('Contacto', 'contacto') }}
+    <p>
+        La forma más rápida de hablar conmigo es por correo:
+        <a href="mailto:bastiansandoval762@gmail.com"><b>bastiansandoval762@gmail.com</b></a>.
+    </p>
+    <p><font size="2" color="{{ c.tenue }}">
+        Para una copia en PDF de esta página, usa Imprimir y elige "Guardar como PDF".
+        Si quieres conocer el lado personal, está todo en la <a href="/bitacora">bitácora</a>.
+    </font></p>
+
+</td></tr>
+</table>
+</td></tr>
+</table>
+{% endblock %}

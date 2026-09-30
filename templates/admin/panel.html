@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% import '_macros.html' as m with context %}
+
+{% block titulo %}Panel | Kernel de Bastian{% endblock %}
+
+{% block contenido %}
+<br>
+{% if ok == 'borrada' %}
+<p><tt><font color="{{ c.titulo }}"><b>Entrada movida a la papelera.</b></font></tt> Se puede recuperar desde <tt>contenido/papelera/</tt> en el servidor.</p>
+{% endif %}
+
+{% call m.ventana('panel_de_publicacion.exe') %}
+    <font size="{{ 4 if movil else 5 }}"><b><a href="/admin/nueva">Escribir entrada nueva</a></b></font><br>
+    <font size="2">Texto, fotos o ambas. Las fotos se pueden subir directo desde la cámara del celular.</font>
+{% endcall %}
+
+<br>
+<h2><font color="{{ c.titulo }}">Entradas ({{ entradas | length }})</font></h2>
+
+<table width="100%" cellpadding="{{ 6 if movil else 5 }}" cellspacing="0" border="1" bordercolor="{{ c.borde }}">
+    {% if not movil %}
+    <tr bgcolor="{{ c.panel }}">
+        <td><tt><b>Fecha</b></tt></td>
+        <td><tt><b>Título</b></tt></td>
+        <td><tt><b>Directorio</b></tt></td>
+        <td><tt><b>Acciones</b></tt></td>
+    </tr>
+    {% endif %}
+    {% for e in entradas %}
+    <tr>
+        {% if movil %}
+        <td>
+            <tt><font size="2" color="{{ c.tenue }}">{{ e.fecha.isoformat() }} {{ e.categoria }}/</font></tt>
+            {% if e.borrador %}<tt><font size="2" color="{{ c.activo }}">[borrador]</font></tt>{% endif %}<br>
+            <b>{{ e.titulo }}</b><br>
+            <a href="/admin/editar/{{ e.slug }}">Editar</a> &nbsp;|&nbsp; <a href="/admin/vista/{{ e.slug }}">Vista previa</a>
+        </td>
+        {% else %}
+        <td nowrap><tt><font size="2">{{ e.fecha.isoformat() }}</font></tt></td>
+        <td>{{ e.titulo }}{% if e.borrador %} <tt><font size="2" color="{{ c.activo }}">[borrador]</font></tt>{% endif %}</td>
+        <td><tt><font size="2">{{ e.categoria }}</font></tt></td>
+        <td nowrap><a href="/admin/editar/{{ e.slug }}">Editar</a> | <a href="/admin/vista/{{ e.slug }}">Vista previa</a></td>
+        {% endif %}
+    </tr>
+    {% else %}
+    <tr><td colspan="4">Todavía no hay entradas. Escribe la primera.</td></tr>
+    {% endfor %}
+</table>
+{% endblock %}

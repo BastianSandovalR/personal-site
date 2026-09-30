@@ -1,0 +1,6 @@
+titulo: Carta sobre un libro de sociología
+fecha: 2026-07-15
+categoria: reflexiones
+estado: publicado
+---
+Borrador de la carta sobre el libro *"Lo que suele suceder a las mujeres en el acontecer de su vida ha sido"*, analizando su contexto desde una perspectiva actual y personal.

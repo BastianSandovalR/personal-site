@@ -1,0 +1,165 @@
+{% extends 'base.html' %}
+{% import '_macros.html' as m with context %}
+
+{% block contenido %}
+<br>
+<center>
+    <!-- CUADRÍCULA 2D: recreación del dibujo de la infancia. Sol, aves, cerros y el río. -->
+    <table border="3" bordercolor="{{ c.texto }}" cellpadding="{{ 6 if movil else 10 }}" cellspacing="0" bgcolor="{{ c.hundido }}">
+        <tr>
+            <td> <font size="1">
+                <pre>
+ \ | /             <marquee direction="left" width="150" scrollamount="2"> ~^~      ~^~ </marquee>
+ --O--                / \
+ / | \                / \
+            /\      /     \      / \
+          /    \    /     \    /    \
+          /    \  /         \  /     \
+        /        \/         \/        \
+        /        \           /         \
+      /            \       /            \
+      /            \       /             \
+    /                \    /               \
+   /                   \  /                \</pre>
+                <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                    <tr>
+                        <td valign="top" align="right">
+<pre>  /                  |
+ /                   |
+/                    |
+=====================|</pre>
+                        </td>
+
+                        <td valign="top" align="center">
+                            <marquee direction="down" height="68" scrollamount="3" bgcolor="{{ c.rio }}">
+                                <font color="{{ c.rio_texto }}">
+                                    <tt>≈≈≈≈≈≈<br>≈≈≈≈≈≈<br>≈≈≈≈≈≈<br>≈≈≈≈≈≈</tt>
+                                </font>
+                            </marquee>
+                        </td>
+
+                        <td valign="top" align="left">
+<pre>|                  \
+|                   \
+|                    \
+|=====================</pre>
+                        </td>
+                    </tr>
+                </table>
+                </font>
+            </td>
+        </tr>
+    </table>
+
+    <h1><font color="{{ c.titulo }}" size="{{ 6 if movil else 7 }}">Bastian</font></h1>
+    <font size="{{ 3 if movil else 4 }}">
+        Estudiante de Ingeniería Civil en Informática, caminante de cerros{% if not movil %}<br>{% endif %}
+        y autor de esta bitácora. Escribo desde la Región del Biobío.
+    </font>
+    <br><br>
+    <marquee width="{{ '100%' if movil else '60%' }}" scrollamount="4"><tt><font color="{{ c.tenue }}">
+        Ingeniería | Calistenia | Heavy Metal | Plant-based | Vida en el Biobío
+    </font></tt></marquee>
+    <br><br>
+    {# preload="none": no gasta los ~10 MB de datos hasta que alguien aprieta play #}
+    <font size="2" color="{{ c.tenue }}">HammerFall para acompañar la lectura:</font><br>
+    <audio controls loop preload="none">
+        <source src="/static/audio/hammerfall_song.mp3" type="audio/mpeg">
+    </audio>
+</center>
+
+<br>
+
+{% macro modo_ingeniero() %}
+<fieldset>
+    <legend><b> / MODO INGENIERO / </b></legend>
+    <p><i>"Resolviendo problemas complejos con código eficiente."</i></p>
+    <tt><font size="2">
+        <b>&gt; STATUS:</b> Finalizando Ing. Civil Informática (USM).<br>
+        <b>&gt; ENFOQUE:</b> Inteligencia Artificial, Datos y Edge Computing.<br>
+        <b>&gt; OBJETIVO:</b> Construir tecnología que impacte el mundo físico y no explote en producción.
+    </font></tt>
+    <p><font size="4"><b><a href="/profesional">Ver perfil profesional</a></b></font><br>
+    <font size="2" color="{{ c.tenue }}">Proyectos, experiencia y stack. Pensado para reclutadores.</font></p>
+</fieldset>
+{% endmacro %}
+{% macro modo_humano() %}
+<fieldset>
+    <legend><b> / MODO HUMANO / </b></legend>
+    <p><i>"La eficiencia también aplica al hardware biológico."</i></p>
+    <tt><font size="2">
+        <b>&gt; COMBUSTIBLE:</b> 100% Plant-Based.<br>
+        <b>&gt; ENTRENAMIENTO:</b> Calistenia y boxeo.<br>
+        <b>&gt; ENTORNO:</b> Trekking y rutas por la Región del Biobío.
+    </font></tt>
+    <p><font size="4"><b><a href="/bitacora">Leer la bitácora</a></b></font><br>
+    <font size="2" color="{{ c.tenue }}">Escritos, viajes, fotos y notas sueltas. Lo que en otro lado serían redes sociales.</font></p>
+</fieldset>
+{% endmacro %}
+
+<!-- LA BIFURCACIÓN: dos caminos, dos públicos -->
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+    {% if movil %}
+    <tr><td>{{ modo_ingeniero() }}<br>{{ modo_humano() }}</td></tr>
+    {% else %}
+    <tr>
+        <td width="49%" valign="top">{{ modo_ingeniero() }}</td>
+        <td width="2%">&nbsp;</td>
+        <td width="49%" valign="top">{{ modo_humano() }}</td>
+    </tr>
+    {% endif %}
+</table>
+
+<br>
+
+{% macro columna_lateral() %}
+    {% call m.ventana('cita_del_dia.txt') %}
+        <font size="2"><i>"{{ cita.texto }}"</i><br><br>
+        <tt>— {{ cita.autor }}</tt></font>
+    {% endcall %}
+    <br>
+    {% if categorias %}
+    {% call m.ventana('directorios/') %}
+        <tt><font size="2">
+        {% for slug, nombre, n in categorias %}
+            [DIR] <a href="/bitacora?cat={{ slug }}">{{ slug }}</a> ({{ n }})<br>
+        {% endfor %}
+        </font></tt>
+    {% endcall %}
+    <br>
+    {% endif %}
+    {% call m.ventana('sin_redes_sociales.txt') %}
+        <font size="2">No tengo redes sociales. Si quieres enterarte cuando publico algo, agrega esta dirección a tu lector RSS:<br><br>
+        <tt><a href="/feed.xml">/feed.xml</a></tt></font>
+    {% endcall %}
+{% endmacro %}
+
+{% macro ultimas() %}
+    <h2><font color="{{ c.titulo }}">Últimas entradas</font></h2>
+    {% for e in recientes %}
+        {{ m.tarjeta(e) }}
+        {% if not loop.last %}<hr size="1" noshade color="{{ c.borde }}">{% endif %}
+    {% else %}
+        <p>La bitácora todavía está vacía.</p>
+    {% endfor %}
+    {% if total > recientes | length %}
+    <br>
+    <p><tt><a href="/bitacora">ls ~/bitacora</a></tt> para ver las {{ total }} entradas.</p>
+    {% endif %}
+{% endmacro %}
+
+<!-- ÚLTIMAS ENTRADAS + COLUMNA LATERAL -->
+{% if movil %}
+    {{ ultimas() }}
+    <br>
+    {{ columna_lateral() }}
+{% else %}
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+    <tr>
+        <td valign="top">{{ ultimas() }}</td>
+        <td width="28">&nbsp;</td>
+        <td width="250" valign="top"><br>{{ columna_lateral() }}</td>
+    </tr>
+</table>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+    <title>Bitácora de Bastian</title>
+    <link>{{ base }}/bitacora</link>
+    <atom:link href="{{ base }}/feed.xml" rel="self" type="application/rss+xml"/>
+    <description>Escritos, viajes, fotos y notas de Bastian, desde la Región del Biobío.</description>
+    <language>es-cl</language>
+    <lastBuildDate>{{ ahora }}</lastBuildDate>
+    {% for e in entradas %}
+    <item>
+        <title>{{ e.titulo }}</title>
+        <link>{{ base }}/entrada/{{ e.slug }}</link>
+        <guid isPermaLink="true">{{ base }}/entrada/{{ e.slug }}</guid>
+        <pubDate>{{ rfc822(e.fecha) }}</pubDate>
+        <category>{{ e.nombre_categoria }}</category>
+        <description>{{ e.resumen }}</description>
+    </item>
+    {% endfor %}
+</channel>
+</rss>

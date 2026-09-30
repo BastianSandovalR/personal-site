@@ -1,0 +1,6 @@
+titulo: Expedición a Río de Janeiro
+fecha: 2026-02-28
+categoria: bitacoras
+estado: publicado
+---
+Registro de mis 7 noches en Río de Janeiro (Febrero 2026). Exploración, logística de pagos digitales y la búsqueda de opciones gastronómicas 100% plant-based fuera del circuito turístico estándar.

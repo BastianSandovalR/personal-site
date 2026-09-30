@@ -1,0 +1,6 @@
+titulo: YOLO y TensorRT sin fundir la placa
+fecha: 2026-09-10
+categoria: ingenieria
+estado: publicado
+---
+La diferencia de rendimiento entre CPU y GPU (Pandas vs cuDF) es abismal al procesar datos pesados. En este apunte de mi tesis, registro cómo compilar los modelos para Edge Computing y correrlos en pipelines de DeepStream sin fundir la placa.

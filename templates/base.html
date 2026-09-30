@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="{% block descripcion %}Bitácora personal y perfil profesional de Bastian Sandoval: ingeniería, Edge Computing, TinyML, cerros y vida en la Región del Biobío.{% endblock %}">
+    <meta name="theme-color" content="{{ c.barra }}">
+    <title>{% block titulo %}Kernel de Bastian{% endblock %}</title>
+    <link rel="alternate" type="application/rss+xml" title="Bitácora de Bastian" href="/feed.xml">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⛰️</text></svg>">
+</head>
+{#
+    Sin CSS ni JavaScript: los colores vienen del tema elegido (main.py > TEMAS)
+    y la distribucion la decide el servidor segun "movil".
+#}
+<body id="top" bgcolor="{{ c.fondo }}" text="{{ c.texto }}" link="{{ c.enlace }}" vlink="{{ c.visitado }}" alink="{{ c.activo }}" marginwidth="{{ 6 if movil else 8 }}" marginheight="{{ 6 if movil else 12 }}">
+<table width="{{ ancho }}" align="center" cellpadding="0" cellspacing="0" border="0">
+<tr><td align="left">
+<font face="Georgia, 'DejaVu Serif', 'Times New Roman', serif">
+
+{% set secciones = [('/', 'Inicio'), ('/bitacora', 'Bitácora'), ('/galeria', 'Galería'), ('/profesional', 'Profesional')] %}
+{% macro enlace_nav(href, nombre, grande=False) -%}
+    {%- set activo = ruta == href or (href != '/' and ruta.startswith(href)) or (href == '/bitacora' and ruta.startswith('/entrada')) -%}
+    <a href="{{ href }}"><font color="{{ c.barra_texto }}"{% if grande %} size="4"{% endif %}>{% if activo %}[ <b>{{ nombre }}</b> ]{% else %}{{ nombre }}{% endif %}</font></a>
+{%- endmacro %}
+
+<!-- BARRA SUPERIOR -->
+<table width="100%" cellpadding="{{ 10 if movil else 8 }}" cellspacing="0" border="0" bgcolor="{{ c.barra }}">
+    {% if movil %}
+    <tr>
+        <td><font color="{{ c.barra_texto }}" size="4"><b>⛰ Kernel de Bastian</b></font></td>
+    </tr>
+    <tr>
+        <td>
+            <!-- Menú desplegable hecho solo con HTML -->
+            <details>
+                <summary><font color="{{ c.barra_texto }}"><tt>☰ Menú</tt></font></summary>
+                <br>
+                {% for href, nombre in secciones %}
+                {{ enlace_nav(href, nombre, grande=True) }}<br><br>
+                {% endfor %}
+                <a href="/feed.xml"><font color="{{ c.barra_texto }}" size="4">Suscribirse (RSS)</font></a>
+            </details>
+        </td>
+    </tr>
+    {% else %}
+    <tr>
+        <td><font color="{{ c.barra_texto }}" size="4"><b>⛰ Kernel de Bastian</b></font></td>
+        <td align="right"><tt>
+            {% for href, nombre in secciones %}{{ enlace_nav(href, nombre) }}{% if not loop.last %}&nbsp;&nbsp;&nbsp;{% endif %}{% endfor %}
+        </tt></td>
+    </tr>
+    {% endif %}
+</table>
+
+{% block contenido %}{% endblock %}
+
+<!-- PIE DE PÁGINA -->
+<br>
+<hr size="1" noshade color="{{ c.borde }}">
+<table width="100%" cellpadding="{{ 4 if movil else 8 }}" cellspacing="0" border="0">
+    <tr>
+        <td align="center"><font size="2" color="{{ c.tenue }}">
+            <tt><b>[ KERNEL DE BASTIAN: EN LÍNEA ]</b></tt><br>
+            Hecho solo con HTML, sin CSS ni JavaScript. Servido con FastAPI desde la Región del Biobío, Chile.<br>
+            <tt>Compilación: {{ ultima_actualizacion }}</tt>
+            <br><br>
+            {% if tema == 'noche' %}
+            <a href="/preferencias?tema=dia&amp;volver={{ ruta | urlencode }}">Cambiar a modo día</a>
+            {% else %}
+            <a href="/preferencias?tema=noche&amp;volver={{ ruta | urlencode }}">Cambiar a modo guardia nocturna</a>
+            {% endif %}
+            {% if movil %}<br><br>{% else %}&nbsp;|&nbsp;{% endif %}
+            {% if movil %}
+            <a href="/preferencias?vista=pc&amp;volver={{ ruta | urlencode }}">Ver versión de escritorio</a>
+            {% else %}
+            <a href="/preferencias?vista=movil&amp;volver={{ ruta | urlencode }}">Ver versión móvil</a>
+            {% endif %}
+            {% if vista_forzada %}
+            {% if movil %}<br><br>{% else %}&nbsp;|&nbsp;{% endif %}
+            <a href="/preferencias?vista=auto&amp;volver={{ ruta | urlencode }}">Detectar vista automáticamente</a>
+            {% endif %}
+            {% if movil %}<br><br>{% else %}&nbsp;|&nbsp;{% endif %}
+            <a href="/feed.xml">Suscribirse por RSS</a>
+            {% if movil %}<br><br>{% else %}&nbsp;|&nbsp;{% endif %}
+            <a href="#top">Volver arriba</a>
+        </font></td>
+    </tr>
+</table>
+<br>
+
+</font>
+</td></tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% import '_macros.html' as m with context %}
+
+{% block titulo %}{{ entrada.titulo }} | Bitácora de Bastian{% endblock %}
+{% block descripcion %}{{ entrada.resumen }}{% endblock %}
+
+{% block contenido %}
+{% if previa %}
+<br>
+<table width="100%" cellpadding="8" cellspacing="0" border="1" bordercolor="{{ c.activo }}">
+    <tr><td><tt><font color="{{ c.activo }}"><b>VISTA PREVIA</b>{% if entrada.borrador %} de un borrador: nadie más puede ver esta entrada.{% endif %}</font></tt>
+    &nbsp; <a href="/admin/editar/{{ entrada.slug }}">Volver a editar</a></td></tr>
+</table>
+{% endif %}
+<br>
+{{ m.ruta_archivo(entrada, enlazar=not previa) }}
+
+<!-- Columna de lectura: en PC se limita el ancho para que las líneas no pasen de ~75 caracteres -->
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+<tr><td align="center">
+<table width="{{ '100%' if movil else '680' }}" cellpadding="0" cellspacing="0" border="0">
+<tr><td align="left">
+
+    <h1><font color="{{ c.titulo }}" size="{{ 6 if movil else 7 }}">{{ entrada.titulo }}</font></h1>
+    <font color="{{ c.tenue }}"><i>{{ entrada.fecha_larga }}</i>, en <a href="/bitacora?cat={{ entrada.categoria }}">{{ entrada.nombre_categoria | lower }}</a></font>
+    <br>
+
+    <font size="{{ 3 if movil else 4 }}">
+    {{ m.cuerpo(entrada) }}
+    </font>
+
+    <br>
+    <center><tt><font color="{{ c.tenue }}">[ EOF ]</font></tt></center>
+    <br>
+
+</td></tr>
+</table>
+</td></tr>
+</table>
+
+{% if anterior or siguiente %}
+<hr size="1" noshade color="{{ c.borde }}">
+<table width="100%" cellpadding="6" cellspacing="0" border="0">
+    {% macro vecina(e, etiqueta, alineacion) %}
+        <font size="2" color="{{ c.tenue }}"><tt>{{ etiqueta }}</tt></font><br>
+        <a href="/entrada/{{ e.slug }}">{{ e.titulo }}</a>
+    {% endmacro %}
+    {% if movil %}
+        {% if siguiente %}<tr><td>{{ vecina(siguiente, 'Entrada más nueva') }}</td></tr>{% endif %}
+        {% if anterior %}<tr><td>{{ vecina(anterior, 'Entrada anterior') }}</td></tr>{% endif %}
+    {% else %}
+    <tr>
+        <td width="50%" valign="top" align="left">{% if anterior %}{{ vecina(anterior, 'Entrada anterior') }}{% endif %}</td>
+        <td width="50%" valign="top" align="right">{% if siguiente %}{{ vecina(siguiente, 'Entrada más nueva') }}{% endif %}</td>
+    </tr>
+    {% endif %}
+</table>
+{% endif %}
+<p><a href="/bitacora">Volver a la bitácora</a></p>
+{% endblock %}

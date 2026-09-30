@@ -1,0 +1,98 @@
+{# Piezas reutilizables. Se importan con: {% import '_macros.html' as m with context %} #}
+
+{# Ventana estilo Windows 95: barra de título + panel gris #}
+{% macro ventana(titulo) %}
+<table width="100%" border="2" cellpadding="0" cellspacing="0" bgcolor="{{ c.panel }}">
+    <tr>
+        <td bgcolor="{{ c.barra }}">
+            <table width="100%" cellpadding="4" cellspacing="0" border="0"><tr><td>
+                <font color="{{ c.barra_texto }}" size="2"><tt><b>{{ titulo }}</b></tt></font>
+            </td></tr></table>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <table width="100%" cellpadding="{{ 8 if movil else 10 }}" cellspacing="0" border="0"><tr><td>
+                {{ caller() }}
+            </td></tr></table>
+        </td>
+    </tr>
+</table>
+{% endmacro %}
+
+{# Ruta tipo archivo: ~/bitacora/bitacoras/rutina_boxeo.txt #}
+{% macro ruta_archivo(e, enlazar=True) -%}
+<tt><font size="2" color="{{ c.tenue }}">
+    {%- if enlazar -%}
+    ~/<a href="/bitacora">bitacora</a>/<a href="/bitacora?cat={{ e.categoria }}">{{ e.categoria }}</a>/{{ e.archivo }}
+    {%- else -%}
+    ~/bitacora/{{ e.categoria }}/{{ e.archivo }}
+    {%- endif -%}
+</font></tt>
+{%- endmacro %}
+
+{# Una entrada en un listado: fecha, archivo, título, resumen y miniatura #}
+{% macro tarjeta(e) %}
+{% set foto = e.fotos[0] if e.fotos else None %}
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+    <tr>
+        <td valign="top">
+            <tt><font size="2" color="{{ c.tenue }}">{{ e.fecha.isoformat() }}&nbsp;&nbsp;{{ e.categoria }}/{{ e.archivo }}</font></tt><br>
+            <font size="{{ 4 if movil else 5 }}"><b><a href="/entrada/{{ e.slug }}">{{ e.titulo }}</a></b></font><br>
+            {% if e.resumen %}<font size="3">{{ e.resumen }}</font>{% endif %}
+        </td>
+        {% if foto %}
+        <td width="{{ 76 if movil else 112 }}" valign="top" align="right">
+            <a href="/entrada/{{ e.slug }}"><img src="{{ foto.url_miniatura }}" width="{{ 68 if movil else 104 }}" alt="{{ foto.pie or e.titulo }}" border="0" hspace="0"></a>
+        </td>
+        {% endif %}
+    </tr>
+</table>
+{% endmacro %}
+
+{# Cuerpo de una entrada: convierte los bloques de contenido.py en HTML #}
+{% macro cuerpo(e) %}
+{% for b in e.bloques %}
+    {% if b[0] == 'p' %}
+<p>{{ b[1] }}</p>
+    {% elif b[0] == 'h' %}
+<h2><font color="{{ c.titulo }}">{{ b[1] }}</font></h2>
+    {% elif b[0] == 'cita' %}
+<blockquote><font color="{{ c.tenue }}"><i>{{ b[1] }}</i></font></blockquote>
+    {% elif b[0] == 'lista' %}
+<ul>
+    {% for item in b[1] %}<li>{{ item }}</li>
+    {% endfor %}
+</ul>
+    {% elif b[0] == 'hr' %}
+<br><center><tt><font color="{{ c.tenue }}">~ ~ ~</font></tt></center><br>
+    {% elif b[0] == 'codigo' %}
+<table width="100%" cellpadding="10" cellspacing="0" border="1" bordercolor="{{ c.borde }}" bgcolor="{{ c.codigo }}">
+    <tr><td>
+    {% if movil %}
+        {# En celular un <pre> se sale de la pantalla: se usa <tt> que sí hace salto de línea #}
+        <tt><font size="2">{% for linea in b[1].split('\n') %}{{ linea | e | replace(' ', '&nbsp;' | safe) }}<br>{% endfor %}</font></tt>
+    {% else %}
+<pre>{{ b[1] }}</pre>
+    {% endif %}
+    </td></tr>
+</table>
+<br>
+    {% elif b[0] == 'foto' %}
+        {% set f = b[1] %}
+        {% if f.ancho %}
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+    <tr><td align="center">
+        <br>
+        <a href="{{ f.url }}"><img src="{{ f.url }}" alt="{{ f.pie or e.titulo }}" border="0"
+            width="{% if movil %}{{ '100%' if f.ancho >= 320 else f.ancho }}{% else %}{{ [f.ancho, 700] | min }}{% endif %}"></a>
+        {% if f.pie %}<br><font size="2" color="{{ c.tenue }}"><i>{{ f.pie }}</i></font>{% endif %}
+        <br><br>
+    </td></tr>
+</table>
+        {% elif previa %}
+<p><tt><font color="{{ c.activo }}">[foto no encontrada: {{ f.archivo }}]</font></tt></p>
+        {% endif %}
+    {% endif %}
+{% endfor %}
+{% endmacro %}

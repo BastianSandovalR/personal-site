@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% import '_macros.html' as m with context %}
+
+{% block titulo %}{{ 'Editar' if entrada else 'Nueva entrada' }} | Kernel de Bastian{% endblock %}
+
+{% block contenido %}
+<br>
+<tt><a href="/admin">&lt; Volver al panel</a></tt>
+
+{% if request.query_params.get('guardado') and entrada %}
+<br><br>
+<table width="100%" cellpadding="8" cellspacing="0" border="1" bordercolor="{{ c.titulo }}">
+    <tr><td>
+        <tt><font color="{{ c.titulo }}"><b>Guardado.</b></font></tt>
+        {% if entrada.borrador %}
+        Es un borrador: solo tú lo ves. <a href="/admin/vista/{{ entrada.slug }}">Vista previa</a>
+        {% else %}
+        <a href="/entrada/{{ entrada.slug }}">Ver entrada publicada</a>
+        {% endif %}
+    </td></tr>
+</table>
+{% endif %}
+
+<h1><font color="{{ c.titulo }}">{{ 'Editar entrada' if entrada else 'Nueva entrada' }}</font></h1>
+
+{% set todas_cats = categorias.items() | list %}
+{% for slug, nombre, n in categorias_usadas if slug not in categorias %}{% set _ = todas_cats.append((slug, nombre)) %}{% endfor %}
+
+{% call m.ventana(entrada.archivo if entrada else 'sin_titulo.txt') %}
+<form action="/admin/guardar" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="token" value="{{ token }}">
+    <input type="hidden" name="slug_original" value="{{ entrada.slug if entrada else '' }}">
+
+    <b><label for="titulo">Título</label></b><br>
+    <input type="text" id="titulo" name="titulo" required maxlength="140" size="{{ 28 if movil else 60 }}"
+        value="{{ entrada.titulo if entrada else '' }}">
+    <br><br>
+
+    {% if movil %}
+    <b><label for="fecha">Fecha</label></b><br>
+    <input type="date" id="fecha" name="fecha" value="{{ hoy.isoformat() }}"><br><br>
+    <b><label for="categoria">Directorio</label></b><br>
+    <select id="categoria" name="categoria">
+        {% for slug, nombre in todas_cats %}
+        <option value="{{ slug }}"{% if (entrada and entrada.categoria == slug) or (not entrada and slug == 'bitacoras') %} selected{% endif %}>{{ nombre }}</option>
+        {% endfor %}
+    </select><br>
+    <font size="2">o uno nuevo:</font> <input type="text" name="categoria_nueva" size="16" maxlength="40" placeholder="ej: recetas">
+    {% else %}
+    <table cellpadding="0" cellspacing="0" border="0"><tr>
+        <td valign="top">
+            <b><label for="fecha">Fecha</label></b><br>
+            <input type="date" id="fecha" name="fecha" value="{{ hoy.isoformat() }}">
+        </td>
+        <td width="24">&nbsp;</td>
+        <td valign="top">
+            <b><label for="categoria">Directorio</label></b><br>
+            <select id="categoria" name="categoria">
+                {% for slug, nombre in todas_cats %}
+                <option value="{{ slug }}"{% if (entrada and entrada.categoria == slug) or (not entrada and slug == 'bitacoras') %} selected{% endif %}>{{ nombre }}</option>
+                {% endfor %}
+            </select>
+            &nbsp;<font size="2">o uno nuevo:</font> <input type="text" name="categoria_nueva" size="16" maxlength="40" placeholder="ej: recetas">
+        </td>
+    </tr></table>
+    {% endif %}
+    <br>
+
+    <b><label for="texto">Texto</label></b><br>
+    <textarea id="texto" name="texto" rows="{{ 16 if movil else 22 }}" cols="{{ 34 if movil else 78 }}" wrap="soft">{{ entrada.texto if entrada else '' }}</textarea>
+    <br>
+    <details>
+        <summary><font size="2">Cómo dar formato al texto</font></summary>
+        <table cellpadding="4" cellspacing="0" border="1" bordercolor="{{ c.borde }}" bgcolor="{{ c.hundido }}">
+            <tr><td><tt>Una línea en blanco</tt></td><td>separa párrafos</td></tr>
+            <tr><td><tt>**negrita**</tt></td><td><b>negrita</b></td></tr>
+            <tr><td><tt>*cursiva*</tt></td><td><i>cursiva</i></td></tr>
+            <tr><td><tt>[texto](https://...)</tt></td><td>un enlace</td></tr>
+            <tr><td><tt>## Subtítulo</tt></td><td>un subtítulo</td></tr>
+            <tr><td><tt>&gt; frase</tt></td><td>una cita</td></tr>
+            <tr><td><tt>- elemento</tt></td><td>una lista</td></tr>
+            <tr><td><tt>---</tt></td><td>un separador</td></tr>
+            <tr><td><tt>```</tt> antes y después</td><td>un bloque de código</td></tr>
+            <tr><td><tt>[foto: archivo.jpg | pie]</tt></td><td>una foto con su pie</td></tr>
+        </table>
+    </details>
+    <br>
+
+    <b><label for="fotos">Agregar fotos</label></b><br>
+    <input type="file" id="fotos" name="fotos" accept="image/jpeg,image/png,image/webp,image/gif" multiple><br>
+    <font size="2" color="{{ c.tenue }}">Se reducen a 1600 px y se les borra la ubicación GPS y demás metadatos. Aparecen al final del texto; después puedes mover la línea <tt>[foto: ...]</tt> donde quieras y escribir el pie después de la barra.</font>
+    <br><br>
+
+    <input type="checkbox" id="borrador" name="borrador" value="true"{% if entrada and entrada.borrador %} checked{% endif %}>
+    <label for="borrador">Guardar como borrador (no se publica)</label>
+    <br><br>
+
+    <input type="submit" value="{{ 'Guardar cambios' if entrada else 'Guardar entrada' }}">
+</form>
+{% endcall %}
+
+{% if entrada and entrada.fotos %}
+<br>
+{% call m.ventana('fotos_de_esta_entrada/') %}
+    <table cellpadding="4" cellspacing="0" border="0">
+    {% for f in entrada.fotos %}
+        <tr>
+            <td valign="top"><a href="{{ f.url }}"><img src="{{ f.url_miniatura }}" width="{{ 64 if movil else 96 }}" alt="{{ f.pie }}" border="0"></a></td>
+            <td valign="top"><tt><font size="2">[foto: {{ f.archivo }} | {{ f.pie }}]</font></tt></td>
+        </tr>
+    {% endfor %}
+    </table>
+{% endcall %}
+{% endif %}
+
+{% if entrada %}
+<br>
+{% call m.ventana('borrar.exe') %}
+<form action="/admin/borrar/{{ entrada.slug }}" method="post">
+    <input type="hidden" name="token" value="{{ token }}">
+    <input type="checkbox" id="confirmar" name="confirmar" value="true" required>
+    <label for="confirmar">Sí, quiero borrar esta entrada</label><br><br>
+    <input type="submit" value="Borrar entrada">
+    <br><font size="2" color="{{ c.tenue }}">Va a la papelera del servidor, no se pierde. Las fotos se quedan donde están.</font>
+</form>
+{% endcall %}
+{% endif %}
+{% endblock %}

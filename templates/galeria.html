@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Galería | Kernel de Bastian{% endblock %}
+
+{% block contenido %}
+<br>
+<tt><font color="{{ c.tenue }}">bastian@biobio:~/fotos$ ls *.jpg</font></tt>
+<h1><font color="{{ c.titulo }}">Galería</font></h1>
+<p>Capturas directas, sin filtros. Cada foto lleva a la entrada donde apareció.</p>
+
+{% if fotos %}
+<table width="100%" cellpadding="{{ 4 if movil else 6 }}" cellspacing="0" border="0">
+    {% for fila in fotos | batch(columnas) %}
+    <tr>
+        {% for foto, e in fila %}
+        <td width="{{ (100 / columnas) | int }}%" valign="top" align="center">
+            <a href="/entrada/{{ e.slug }}"><img src="{{ foto.url_miniatura }}" alt="{{ foto.pie or e.titulo }}" border="0"
+                width="{{ '100%' if movil else ([foto.ancho, 190] | min) }}"></a><br>
+            <font size="2">{% if foto.pie %}<i>{{ foto.pie }}</i>{% else %}{{ e.titulo }}{% endif %}</font><br>
+            <tt><font size="1" color="{{ c.tenue }}">{{ e.fecha.isoformat() }}</font></tt>
+        </td>
+        {% endfor %}
+        {% for _ in range(columnas - fila | length) %}<td width="{{ (100 / columnas) | int }}%">&nbsp;</td>{% endfor %}
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p>Todavía no hay fotos publicadas.</p>
+{% endif %}
+{% endblock %}

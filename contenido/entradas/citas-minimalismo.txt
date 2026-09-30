@@ -1,0 +1,7 @@
+titulo: Citas sobre minimalismo
+fecha: 2026-09-12
+categoria: fragmentos
+estado: publicado
+---
+> "El minimalismo no es falta de cosas, es la cantidad exacta de cosas."
+> "La eficiencia es la única verdad en un sistema saturado."
