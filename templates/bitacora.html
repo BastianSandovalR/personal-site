@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
 {% import '_macros.html' as m with context %}
 
-{% block titulo %}{% if cat %}{{ nombre_cat }} | {% endif %}Bitácora de Bastian{% endblock %}
+{% block titulo %}{% if cat %}{{ nombre_cat }} | {% endif %}Bitácora de Bastian Sandoval{% if pagina > 1 %} (página {{ pagina }}){% endif %}{% endblock %}
+{% block descripcion %}{% if cat %}Entradas de {{ nombre_cat | lower }} en la bitácora de Bastian Sandoval.{% else %}Bitácora de Bastian Sandoval: escritos sobre ingeniería, entrenamiento, viajes y reflexiones, con fotos, desde la Región del Biobío.{% endif %}{% endblock %}
 
 {% block contenido %}
 <br>

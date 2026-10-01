@@ -1,4 +1,5 @@
 import json
+import os
 import random
 from collections import Counter
 from datetime import datetime, timezone
@@ -7,7 +8,7 @@ from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.exception_handlers import http_exception_handler
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, PlainTextResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from starlette.exceptions import HTTPException as StarletteHTTPException
@@ -28,7 +29,16 @@ app.mount('/fotos', StaticFiles(directory=ct.FOTOS), name='fotos')
 # Se lee una sola vez al arrancar, no en cada visita
 CITAS = json.loads((BASE / 'src' / 'data' / 'citas.json').read_text(encoding='utf-8'))
 
-ULTIMA_ACTUALIZACION = '30 de septiembre de 2026'
+ULTIMA_ACTUALIZACION = '1 de octubre de 2026'
+
+# Direccion oficial del sitio (ej: https://atay.cl). Se usa en enlaces canonicos, sitemap y RSS,
+# y hace que www.* y http:// redirijan a ella. Sin definir (en local) se usa la direccion de la visita.
+SITIO_URL = os.environ.get('SITIO_URL', '').rstrip('/')
+DOMINIO = SITIO_URL.split('://')[-1]
+
+
+def sitio(request: Request) -> str:
+    return SITIO_URL or str(request.base_url).rstrip('/')
 POR_PAGINA = 12
 
 # Colores del sitio. Sin CSS, se aplican con atributos HTML (bgcolor, text, link...)
@@ -71,6 +81,17 @@ def categorias_publicas() -> list[tuple[str, str, int]]:
     return [(c, ct.CATEGORIAS.get(c, c.replace('_', ' ').capitalize()), conteo[c]) for c in orden if conteo[c]]
 
 
+def canonica(request: Request) -> str:
+    # Una sola direccion "oficial" por pagina: solo se conservan los parametros que cambian el contenido
+    consulta = []
+    if request.url.path == '/bitacora':
+        if request.query_params.get('cat'):
+            consulta.append(f"cat={request.query_params['cat']}")
+        if request.query_params.get('pagina', '1') not in ('', '1'):
+            consulta.append(f"pagina={request.query_params['pagina']}")
+    return sitio(request) + request.url.path + ('?' + '&'.join(consulta) if consulta else '')
+
+
 def contexto(request: Request) -> dict:
     tema = request.cookies.get('tema', 'dia')
     movil = es_movil(request)
@@ -80,6 +101,8 @@ def contexto(request: Request) -> dict:
         'c': TEMAS.get(tema, TEMAS['dia']),
         'ancho': '100%' if movil else '820',
         'ruta': request.url.path,
+        'sitio': sitio(request),
+        'canonica': canonica(request),
         'ultima_actualizacion': ULTIMA_ACTUALIZACION,
         'cv_pdf': (STATIC / 'cv.pdf').is_file(),
         'vista_forzada': request.cookies.get('vista') in ('pc', 'movil'),
@@ -92,6 +115,12 @@ def render(request: Request, nombre: str, status_code: int = 200, **extra):
 
 @app.middleware('http')
 async def cabeceras(request: Request, call_next):
+    # www.atay.cl y http:// van a la direccion oficial: los buscadores ven un solo sitio
+    # y la clave del panel nunca viaja sin cifrar
+    host = request.headers.get('host', '').split(':')[0].lower()
+    if DOMINIO and (host == f'www.{DOMINIO}' or (host == DOMINIO and request.url.scheme == 'http')):
+        destino = SITIO_URL + request.url.path + (f'?{request.url.query}' if request.url.query else '')
+        return RedirectResponse(destino, status_code=301)
     respuesta = await call_next(request)
     # La misma URL cambia segun el dispositivo y las preferencias: los caches deben saberlo
     respuesta.headers['Vary'] = 'User-Agent, Sec-CH-UA-Mobile, Cookie'
@@ -106,7 +135,7 @@ async def error_http(request: Request, exc: StarletteHTTPException):
     if exc.status_code == 401 or request.url.path.startswith(('/static', '/fotos')):
         return await http_exception_handler(request, exc)
     detalle = exc.detail if exc.status_code in (400, 403) else None
-    return render(request, 'error.html', exc.status_code, codigo=exc.status_code, detalle=detalle)
+    return render(request, 'error.html', exc.status_code, codigo=exc.status_code, detalle=detalle, noindex=True)
 
 
 @app.get('/', response_class=HTMLResponse)
@@ -191,7 +220,7 @@ def preferencias(request: Request, tema: str = '', vista: str = '', volver: str 
 @app.get('/feed.xml')
 def feed(request: Request):
     entradas = ct.todas()[:20]
-    base = str(request.base_url).rstrip('/')
+    base = sitio(request)
     ahora = format_datetime(datetime.now(timezone.utc))
     return templates.TemplateResponse(
         request, 'feed.xml',
@@ -201,9 +230,20 @@ def feed(request: Request):
     )
 
 
-@app.get('/robots.txt', response_class=HTMLResponse)
-def robots():
-    return HTMLResponse('User-agent: *\nDisallow: /admin\n', media_type='text/plain')
+@app.get('/sitemap.xml')
+def sitemap(request: Request):
+    base = sitio(request)
+    entradas = ct.todas()
+    reciente = entradas[0].fecha.isoformat() if entradas else None
+    urls = [(f'{base}/', reciente), (f'{base}/profesional', None), (f'{base}/bitacora', reciente), (f'{base}/galeria', reciente)]
+    urls += [(f'{base}/bitacora?cat={c}', None) for c, _, _ in categorias_publicas()]
+    urls += [(f'{base}/entrada/{e.slug}', e.fecha.isoformat()) for e in entradas]
+    return templates.TemplateResponse(request, 'sitemap.xml', {'urls': urls}, media_type='application/xml; charset=utf-8')
+
+
+@app.get('/robots.txt', response_class=PlainTextResponse)
+def robots(request: Request):
+    return f'User-agent: *\nDisallow: /admin\nDisallow: /preferencias\n\nSitemap: {sitio(request)}/sitemap.xml\n'
 
 
 app.include_router(admin.crear_router(templates, lambda r: contexto(r) | {'categorias_usadas': categorias_publicas()}))

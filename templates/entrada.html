@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
 {% import '_macros.html' as m with context %}
 
-{% block titulo %}{{ entrada.titulo }} | Bitácora de Bastian{% endblock %}
+{% block titulo %}{{ entrada.titulo }} | Bastian Sandoval{% endblock %}
+{% block og_tipo %}article{% endblock %}
+{% block og_imagen %}{% if entrada.fotos and entrada.fotos[0].ancho >= 600 %}{{ sitio }}{{ entrada.fotos[0].url }}{% else %}{{ sitio }}/static/og.png{% endif %}{% endblock %}
+{% block meta_extra %}<meta property="article:published_time" content="{{ entrada.fecha.isoformat() }}">
+    <meta property="article:author" content="Bastian Sandoval">{% endblock %}
 {% block descripcion %}{{ entrada.resumen }}{% endblock %}
 
 {% block contenido %}
@@ -19,14 +23,18 @@
 <table width="100%" cellpadding="0" cellspacing="0" border="0">
 <tr><td align="center">
 <table width="{{ '100%' if movil else '680' }}" cellpadding="0" cellspacing="0" border="0">
-<tr><td align="left">
+<tr><td align="left" itemscope itemtype="https://schema.org/BlogPosting">
+    <meta itemprop="author" content="Bastian Sandoval">
+    <link itemprop="mainEntityOfPage" href="{{ canonica }}">
 
-    <h1><font color="{{ c.titulo }}" size="{{ 6 if movil else 7 }}">{{ entrada.titulo }}</font></h1>
-    <font color="{{ c.tenue }}"><i>{{ entrada.fecha_larga }}</i>, en <a href="/bitacora?cat={{ entrada.categoria }}">{{ entrada.nombre_categoria | lower }}</a></font>
+    <h1><font color="{{ c.titulo }}" size="{{ 6 if movil else 7 }}"><span itemprop="headline">{{ entrada.titulo }}</span></font></h1>
+    <font color="{{ c.tenue }}"><i><time itemprop="datePublished" datetime="{{ entrada.fecha.isoformat() }}">{{ entrada.fecha_larga }}</time></i>, en <a href="/bitacora?cat={{ entrada.categoria }}">{{ entrada.nombre_categoria | lower }}</a></font>
     <br>
 
     <font size="{{ 3 if movil else 4 }}">
+    <span itemprop="articleBody">
     {{ m.cuerpo(entrada) }}
+    </span>
     </font>
 
     <br>

@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
-{% block titulo %}Bastian Sandoval | Perfil profesional{% endblock %}
+{% block titulo %}Bastian Sandoval | Ingeniero en formación: datos, Edge Computing y TinyML{% endblock %}
+{% block og_tipo %}profile{% endblock %}
 {% block descripcion %}Bastian Sandoval: estudiante de último año de Ingeniería Civil en Informática (USM). Datos, Edge Computing y TinyML. Proyectos, experiencia y contacto.{% endblock %}
 
 {#
@@ -83,11 +84,15 @@
 <table width="100%" cellpadding="0" cellspacing="0" border="0">
 <tr><td align="center">
 <table width="{{ '100%' if movil else '720' }}" cellpadding="0" cellspacing="0" border="0">
-<tr><td align="left">
+{# itemscope/itemprop: datos estructurados (schema.org) escritos como atributos HTML, sin <script> #}
+<tr><td align="left" itemscope itemtype="https://schema.org/Person">
+    <link itemprop="url" href="{{ sitio }}/profesional">
+    <meta itemprop="jobTitle" content="Estudiante de Ingeniería Civil en Informática">
+    <meta itemprop="knowsAbout" content="Edge Computing, TinyML, ingeniería de datos, machine learning, FastAPI, Python">
 
     <!-- ENCABEZADO -->
     <br>
-    <font size="{{ 6 if movil else 7 }}"><b>Bastian Sandoval</b></font><br>
+    <h1><font size="{{ 6 if movil else 7 }}"><span itemprop="name">Bastian Sandoval</span></font></h1>
     <font size="{{ 3 if movil else 4 }}">
         Estudiante de último año de Ingeniería Civil en Informática (USM).<br>
         Trabajo con datos, Edge Computing y TinyML.
@@ -95,10 +100,10 @@
     <br><br>
 
     <table width="100%" cellpadding="{{ 4 if movil else 3 }}" cellspacing="0" border="0">
-        {% call fila('Ubicación') %}Región del Biobío, Chile{% endcall %}
+        {% call fila('Ubicación') %}<span itemprop="homeLocation">Región del Biobío, Chile</span>{% endcall %}
         {% call fila('Disponibilidad') %}Reubicación internacional después de titularme (~2027){% endcall %}
-        {% call fila('Correo') %}<a href="mailto:bastiansandoval762@gmail.com">bastiansandoval762@gmail.com</a>{% endcall %}
-        {% call fila('GitHub') %}<a href="https://github.com/BastianSandovalR" rel="noopener noreferrer">github.com/BastianSandovalR</a>{% endcall %}
+        {% call fila('Correo') %}<a itemprop="email" href="mailto:bastiansandoval762@gmail.com">bastiansandoval762@gmail.com</a>{% endcall %}
+        {% call fila('GitHub') %}<a itemprop="sameAs" href="https://github.com/BastianSandovalR" rel="me noopener">github.com/BastianSandovalR</a>{% endcall %}
         {% if cv_pdf %}
         {% call fila('Currículum') %}<a href="/static/cv.pdf" download>Descargar CV en PDF</a>{% endcall %}
         {% endif %}
@@ -136,7 +141,7 @@
     {{ seccion('Formación') }}
     <table width="100%" cellpadding="{{ 6 if movil else 8 }}" cellspacing="0" border="0">
         {% call fila('En curso') %}
-            <b>Ingeniería Civil en Informática</b>, Universidad Técnica Federico Santa María, Concepción<br>
+            <b>Ingeniería Civil en Informática</b>, <span itemprop="alumniOf">Universidad Técnica Federico Santa María</span>, Concepción<br>
             Último año. Memoria de título en TinyML.
         {% endcall %}
     </table>

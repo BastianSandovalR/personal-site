@@ -93,7 +93,7 @@ def crear_router(templates, contexto) -> APIRouter:
 
     def pagina(request: Request, nombre: str, **extra):
         return templates.TemplateResponse(
-            request, nombre, contexto(request) | {'token': token_csrf(), 'categorias': ct.CATEGORIAS} | extra,
+            request, nombre, contexto(request) | {'token': token_csrf(), 'categorias': ct.CATEGORIAS, 'noindex': True} | extra,
             headers={'Cache-Control': 'no-store'},
         )
 

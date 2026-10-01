@@ -3,10 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="{% block descripcion %}Bitácora personal y perfil profesional de Bastian Sandoval: ingeniería, Edge Computing, TinyML, cerros y vida en la Región del Biobío.{% endblock %}">
+    <title>{% block titulo %}Bastian Sandoval | Ingeniería, bitácora y vida en el Biobío{% endblock %}</title>
+    <meta name="description" content="{% block descripcion %}Sitio de Bastian Sandoval, estudiante de Ingeniería Civil en Informática (USM): perfil profesional, proyectos de Edge Computing y TinyML, y una bitácora de escritos, viajes y fotos desde la Región del Biobío.{% endblock %}">
+    <meta name="author" content="Bastian Sandoval">
+    {% if noindex %}
+    <meta name="robots" content="noindex, nofollow">
+    {% else %}
+    <link rel="canonical" href="{{ canonica }}">
+    {% endif %}
+
+    <!-- Vista previa al compartir el enlace (WhatsApp, LinkedIn, etc.). Son etiquetas HTML, no CSS ni JS -->
+    <meta property="og:site_name" content="Bastian Sandoval">
+    <meta property="og:locale" content="es_CL">
+    <meta property="og:type" content="{% block og_tipo %}website{% endblock %}">
+    <meta property="og:title" content="{{ self.titulo() }}">
+    <meta property="og:description" content="{{ self.descripcion() }}">
+    <meta property="og:url" content="{{ canonica }}">
+    <meta property="og:image" content="{% block og_imagen %}{{ sitio }}/static/og.png{% endblock %}">
+    <meta name="twitter:card" content="summary_large_image">
+    {% block meta_extra %}{% endblock %}
+
     <meta name="theme-color" content="{{ c.barra }}">
-    <title>{% block titulo %}Kernel de Bastian{% endblock %}</title>
-    <link rel="alternate" type="application/rss+xml" title="Bitácora de Bastian" href="/feed.xml">
+    <link rel="alternate" type="application/rss+xml" title="Bitácora de Bastian Sandoval" href="{{ sitio }}/feed.xml">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⛰️</text></svg>">
 </head>
 {#
@@ -66,19 +84,19 @@
             <tt>Compilación: {{ ultima_actualizacion }}</tt>
             <br><br>
             {% if tema == 'noche' %}
-            <a href="/preferencias?tema=dia&amp;volver={{ ruta | urlencode }}">Cambiar a modo día</a>
+            <a rel="nofollow" href="/preferencias?tema=dia&amp;volver={{ ruta | urlencode }}">Cambiar a modo día</a>
             {% else %}
-            <a href="/preferencias?tema=noche&amp;volver={{ ruta | urlencode }}">Cambiar a modo guardia nocturna</a>
+            <a rel="nofollow" href="/preferencias?tema=noche&amp;volver={{ ruta | urlencode }}">Cambiar a modo guardia nocturna</a>
             {% endif %}
             {% if movil %}<br><br>{% else %}&nbsp;|&nbsp;{% endif %}
             {% if movil %}
-            <a href="/preferencias?vista=pc&amp;volver={{ ruta | urlencode }}">Ver versión de escritorio</a>
+            <a rel="nofollow" href="/preferencias?vista=pc&amp;volver={{ ruta | urlencode }}">Ver versión de escritorio</a>
             {% else %}
-            <a href="/preferencias?vista=movil&amp;volver={{ ruta | urlencode }}">Ver versión móvil</a>
+            <a rel="nofollow" href="/preferencias?vista=movil&amp;volver={{ ruta | urlencode }}">Ver versión móvil</a>
             {% endif %}
             {% if vista_forzada %}
             {% if movil %}<br><br>{% else %}&nbsp;|&nbsp;{% endif %}
-            <a href="/preferencias?vista=auto&amp;volver={{ ruta | urlencode }}">Detectar vista automáticamente</a>
+            <a rel="nofollow" href="/preferencias?vista=auto&amp;volver={{ ruta | urlencode }}">Detectar vista automáticamente</a>
             {% endif %}
             {% if movil %}<br><br>{% else %}&nbsp;|&nbsp;{% endif %}
             <a href="/feed.xml">Suscribirse por RSS</a>
