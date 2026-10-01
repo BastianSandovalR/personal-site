@@ -1,6 +1,0 @@
-titulo: La eterna caza del coletero
-fecha: 2026-09-14
-categoria: fotos
-estado: publicado
----
-[foto: mandrill128.jpg | La eterna caza del coletero.]

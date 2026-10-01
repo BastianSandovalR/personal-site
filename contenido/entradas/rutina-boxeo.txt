@@ -1,6 +1,0 @@
-titulo: Rutina de boxeo
-fecha: 2026-09-08
-categoria: bitacoras
-estado: publicado
----
-Levantar peso en el gimnasio y hacer handstand push-ups no te prepara para el desgaste cardiovascular del ring. Estos son mis apuntes sobre cómo adaptar el entrenamiento de fuerza hacia el acondicionamiento explosivo.

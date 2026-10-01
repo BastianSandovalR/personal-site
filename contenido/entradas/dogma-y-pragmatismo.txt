@@ -1,0 +1,18 @@
+titulo: Dogma y pragmatismo
+fecha: 2026-03-05
+categoria: reflexiones
+estado: publicado
+---
+Fui vegano durante ocho meses exactos antes de hacer la transición al vegetarianismo. Cuando uno toma una postura ética fuerte respecto a la alimentación, la tendencia inicial es buscar la pureza absoluta. Se traza una línea inquebrantable en el suelo y se clasifica al mundo en términos binarios. Durante esos meses, el esfuerzo cognitivo y logístico para mantener esa pureza en un entorno que no está diseñado para ella fue gigantesco.
+
+El problema con los dogmas, incluso aquellos que nacen de las mejores intenciones, es que son inflexibles por naturaleza. Cuando la realidad choca con el dogma, el sistema se fractura. En mi caso, mantener un régimen estricto comenzó a generar fricciones innecesarias en mi rutina, en mis entrenamientos de fuerza y en situaciones sociales cotidianas que deberían ser simples, como compartir un espacio con mi familia o hacer una pausa durante un viaje largo con mi mamá.
+
+Decidir pasar al vegetarianismo no fue un proceso de rendición, sino un ejercicio de pragmatismo. Me di cuenta de que el impacto positivo de una decisión sostenida a largo plazo, aunque sea un poco menos "perfecta" según los estándares radicales, es mucho mayor que el de una postura extrema que resulta insostenible y te quema mentalmente al cabo de un año.
+
+## La eficiencia de la moderación
+
+He aplicado este mismo razonamiento a otros aspectos de mi vida. En la ingeniería de software, por ejemplo, existe el antipatrón de la sobreoptimización prematura. Te puedes gastar semanas intentando que un algoritmo sea matemáticamente perfecto y consuma cero recursos, perdiendo de vista que una solución lo suficientemente buena, que se pueda mantener en el tiempo y que el equipo entienda, es mucho más valiosa. El purismo técnico es tan paralizante como el purismo alimenticio.
+
+El vegetarianismo me dio el punto de equilibrio exacto. Sigo manteniendo mi postura ética de no consumir carne y, al mismo tiempo, soy tajante en mi rechazo a los materiales de origen animal en mi ropa y equipo técnico de montaña. Pero he eliminado la ansiedad de revisar la etiqueta de cada producto buscando trazas microscópicas que no cambian el panorama global.
+
+La consistencia tiene mucho más valor que la intensidad fugaz. Es preferible construir un sistema de valores que tenga la elasticidad suficiente para soportar el roce con el mundo real. Las convicciones rígidas tienden a quebrarse bajo presión; las posturas pragmáticas, en cambio, se adaptan, absorben el impacto y te permiten seguir avanzando sin perder el norte.

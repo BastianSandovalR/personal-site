@@ -1,6 +1,0 @@
-titulo: No quiero un café solo
-fecha: 2026-09-01
-categoria: reflexiones
-estado: publicado
----
-Una analogía psicológica sobre el enfoque. No se trata literalmente de una bebida, sino de un marco de crecimiento personal y de mantener la mentalidad intacta frente a las distracciones del día a día.
