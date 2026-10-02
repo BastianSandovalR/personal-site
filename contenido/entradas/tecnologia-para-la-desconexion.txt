@@ -5,6 +5,8 @@ estado: publicado
 ---
 La ironía de la tecnología moderna es que asume un mundo en perfecto estado de funcionamiento. Diseñamos sistemas increíbles que dependen de una frágil cadena de dependencias: servidores DNS que siempre responden, fibra óptica intacta, proveedores de nube disponibles y una red eléctrica ininterrumpida. Pero cualquier persona que haya estado en medio de una emergencia sabe que lo primero que colapsa es precisamente esa ilusión de hiperconectividad.
 
+[foto: 2026-09-05-tecnologia-para-la-desconexion.jpg | Sin señal y sin enchufes: la Vía Láctea sobre los cerros.]
+
 Esa vulnerabilidad fue lo que me llevó a pensar en la arquitectura de una guía de emergencia basada en inteligencia artificial, pero diseñada con un requisito absoluto: la independencia de la red (offline-first). La premisa es sencilla y a la vez técnicamente compleja. ¿Qué pasa si necesitas consultar protocolos críticos de primeros auxilios o manuales de supervivencia y no tienes acceso a internet? La nube no sirve de nada cuando la señal de la antena se cae.
 
 ## Modelos pequeños y resiliencia
