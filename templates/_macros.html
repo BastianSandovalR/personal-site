@@ -64,6 +64,9 @@
     {% for item in b[1] %}<li>{{ item }}</li>
     {% endfor %}
 </ul>
+    {% elif b[0] == 'verso' %}
+<p>{% for v in b[1] %}{{ v }}{% if not loop.last %}<br>
+{% endif %}{% endfor %}</p>
     {% elif b[0] == 'hr' %}
 <br><center><tt><font color="{{ c.tenue }}">~ ~ ~</font></tt></center><br>
     {% elif b[0] == 'codigo' %}

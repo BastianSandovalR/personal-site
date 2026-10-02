@@ -11,6 +11,7 @@ Formato de un archivo (ver contenido/COMO_PUBLICAR.md):
 
     ## Subtitulo
     > una cita
+    | un verso (cada linea con | es un verso; una linea en blanco separa estrofas)
     - un item de lista
     [foto: archivo.jpg | pie de foto]
 """
@@ -35,6 +36,7 @@ CATEGORIAS = {
     'bitacoras': 'Bitácoras de vida',
     'reflexiones': 'Reflexiones y cartas',
     'fragmentos': 'Fragmentos sueltos',
+    'poemas': 'Poemas',
     'fotos': 'Archivo fotográfico',
 }
 
@@ -94,6 +96,9 @@ class Entrada:
                 plano = re.sub(r'<[^>]+>', '', str(bloque[1]))
                 plano = html.unescape(plano)
                 return plano if len(plano) <= 220 else plano[:217].rsplit(' ', 1)[0] + '…'
+            if bloque[0] == 'verso':
+                # un poema se resume con su primera estrofa
+                return html.unescape(' / '.join(re.sub(r'<[^>]+>', '', str(v)) for v in bloque[1]))
         return ''
 
 
@@ -162,6 +167,12 @@ def parsear_cuerpo(texto: str) -> list:
                 bloques[-1] = ('cita', Markup(f'{bloques[-1][1]}<br>{en_linea(limpia[1:].strip())}'))
             else:
                 bloques.append(('cita', en_linea(limpia[1:].strip())))
+        elif limpia.startswith('|'):
+            cerrar_parrafo()
+            if bloques and bloques[-1][0] == 'verso' and lineas[i - 1].strip():
+                bloques[-1][1].append(en_linea(limpia[1:].strip()))
+            else:
+                bloques.append(('verso', [en_linea(limpia[1:].strip())]))
         elif limpia.startswith('- '):
             cerrar_parrafo()
             if bloques and bloques[-1][0] == 'lista':

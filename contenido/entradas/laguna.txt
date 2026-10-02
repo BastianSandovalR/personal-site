@@ -1,0 +1,16 @@
+titulo: Laguna
+fecha: 2026-10-02
+categoria: poemas
+estado: publicado
+---
+| El agua está tan quieta
+| que el cerro se repite entero,
+| cabeza abajo, sin equivocarse.
+
+| Tiro una piedra chica
+| y el mundo de abajo tiembla.
+| El de arriba ni se entera.
+
+| Espero a que se calme.
+| Hay cosas que se arreglan
+| con solo dejar de tocarlas.

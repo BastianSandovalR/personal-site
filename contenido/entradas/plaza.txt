@@ -1,0 +1,17 @@
+titulo: Plaza
+fecha: 2026-10-02
+categoria: poemas
+estado: publicado
+---
+| Me siento en una banca sin plan.
+| Pasa una señora con bolsas,
+| un niño que discute con su helado,
+| un perro que conoce a todos.
+
+| Nadie me debe nada
+| y yo no le debo nada a nadie.
+| Somos extras en la película del otro.
+
+| Se enfría la tarde.
+| Me voy sin haber hecho nada
+| y con la cabeza en orden.

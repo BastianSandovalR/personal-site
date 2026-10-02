@@ -35,8 +35,17 @@ Texto con **negrita**, *cursiva*, `código` y [un enlace](https://github.com/Bas
 [foto: nombre-de-la-foto.jpg | El pie de la foto]
 ```
 
+Para poesía, cada verso empieza con `| ` y una línea en blanco separa las estrofas:
+
+```
+| Primer verso
+| segundo verso
+
+| Otra estrofa
+```
+
 Las fotos van en `contenido/fotos/`. Categorías con nombre bonito: `ingenieria`, `bitacoras`,
-`reflexiones`, `fragmentos`, `fotos`. Cualquier otra también funciona (ej: `recetas`).
+`reflexiones`, `fragmentos`, `poemas`, `fotos`. Cualquier otra también funciona (ej: `recetas`).
 
 ## Papelera
 

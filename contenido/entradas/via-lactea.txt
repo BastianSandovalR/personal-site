@@ -1,0 +1,16 @@
+titulo: Vía Láctea
+fecha: 2026-10-02
+categoria: poemas
+estado: publicado
+---
+| Apago la linterna
+| y el cerro deja de ser mío.
+| Arriba alguien dejó todo prendido.
+
+| Esa luz salió de viaje
+| antes de que existiera mi apellido.
+| Llega tarde y llega igual.
+
+| Me quedo quieto,
+| chico y sin apuro,
+| como un dato que por fin calza.

@@ -1,0 +1,16 @@
+titulo: Cuesta arriba
+fecha: 2026-10-02
+categoria: poemas
+estado: publicado
+---
+| El cerro no negocia.
+| Un paso, después otro,
+| y la mochila opinando en cada uno.
+
+| A mitad de la subida
+| se acaban las excusas
+| y queda solo la respiración.
+
+| Arriba no hay premio.
+| Hay viento, silencio
+| y ganas de volver a subir.

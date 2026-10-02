@@ -1,0 +1,15 @@
+titulo: Pan con palta
+fecha: 2026-10-02
+categoria: poemas
+estado: publicado
+---
+| Un pan, media palta,
+| la sal que quedó al fondo de la bolsa.
+| No hay mesa: hay una rodilla.
+
+| Abajo esto sería poca cosa.
+| Acá, con frío en los dedos,
+| es el mejor plato de la semana.
+
+| El hambre cocina bien
+| y la subida le ayuda.

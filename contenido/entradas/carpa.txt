@@ -1,0 +1,17 @@
+titulo: Carpa
+fecha: 2026-10-02
+categoria: poemas
+estado: publicado
+---
+| Llueve sobre la tela
+| a un palmo de mi cara.
+| Afuera, el agua; adentro, yo, seco.
+
+| Dos milímetros de nylon
+| separan el frío de mi saco.
+| Nunca una pared tan delgada
+| me pareció tan honesta.
+
+| Mañana habrá barro.
+| Esta noche hay lluvia
+| y nada más que hacer que escucharla.

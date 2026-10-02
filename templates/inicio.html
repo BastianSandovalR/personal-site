@@ -100,12 +100,12 @@
 <!-- LA BIFURCACIÓN: dos caminos, dos públicos -->
 <table width="100%" cellpadding="0" cellspacing="0" border="0">
     {% if movil %}
-    <tr><td>{{ modo_ingeniero() }}<br>{{ modo_humano() }}</td></tr>
+    <tr><td>{{ modo_humano() }}<br>{{ modo_ingeniero() }}</td></tr>
     {% else %}
     <tr>
-        <td width="49%" valign="top">{{ modo_ingeniero() }}</td>
-        <td width="2%">&nbsp;</td>
         <td width="49%" valign="top">{{ modo_humano() }}</td>
+        <td width="2%">&nbsp;</td>
+        <td width="49%" valign="top">{{ modo_ingeniero() }}</td>
     </tr>
     {% endif %}
 </table>
