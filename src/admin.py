@@ -129,6 +129,7 @@ def crear_router(templates, contexto) -> APIRouter:
         categoria_nueva: str = Form(''),
         texto: str = Form(''),
         borrador: bool = Form(False),
+        novedad: bool = Form(False),
         fotos: list[UploadFile] = File(default=[]),
     ):
         revisar_token(token)
@@ -164,7 +165,7 @@ def crear_router(templates, contexto) -> APIRouter:
         if lineas_fotos:
             cuerpo = (cuerpo + '\n\n' if cuerpo else '') + '\n\n'.join(lineas_fotos)
 
-        escribir(ct.ENTRADAS / f'{slug}.txt', ct.serializar(titulo, dia, cat, borrador, cuerpo))
+        escribir(ct.ENTRADAS / f'{slug}.txt', ct.serializar(titulo, dia, cat, borrador, cuerpo, novedad))
         return RedirectResponse(f'/admin/editar/{slug}?guardado=1', status_code=303)
 
     @router.post('/borrar/{slug}')

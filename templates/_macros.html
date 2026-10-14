@@ -81,6 +81,20 @@
     </td></tr>
 </table>
 <br>
+    {% elif b[0] == 'video' and b[1].existe %}
+        {% set v = b[1] %}
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+    <tr><td align="center">
+        <br>
+        {# preload="none": no descarga nada hasta que se aprieta play; la portada es un .jpg liviano #}
+        <video controls playsinline preload="none" width="{{ '100%' if movil else 360 }}"{% if v.portada %} poster="{{ v.portada }}"{% endif %}>
+            <source src="{{ v.url }}" type="video/mp4">
+            <a href="{{ v.url }}">Descargar el video</a>
+        </video>
+        {% if v.pie %}<br><font size="2" color="{{ c.tenue }}"><i>{{ v.pie }}</i></font>{% endif %}
+        <br><br>
+    </td></tr>
+</table>
     {% elif b[0] == 'foto' %}
         {% set f = b[1] %}
         {% if f.ancho %}

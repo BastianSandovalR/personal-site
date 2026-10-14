@@ -6,6 +6,7 @@ Formato de un archivo (ver contenido/COMO_PUBLICAR.md):
     fecha: 2026-09-08
     categoria: bitacoras
     estado: publicado          (o "borrador")
+    novedad: si                (opcional: aparece como ventana al entrar a la portada)
     ---
     Texto con **negrita**, *cursiva*, `codigo` y [links](https://...).
 
@@ -14,6 +15,7 @@ Formato de un archivo (ver contenido/COMO_PUBLICAR.md):
     | un verso (cada linea con | es un verso; una linea en blanco separa estrofas)
     - un item de lista
     [foto: archivo.jpg | pie de foto]
+    [video: archivo.mp4 | pie del video]   (portada del video: archivo.jpg con el mismo nombre)
 """
 import html
 import os
@@ -64,6 +66,25 @@ class Foto:
 
 
 @dataclass
+class Video:
+    archivo: str
+    pie: str
+
+    @property
+    def url(self) -> str:
+        return f'/fotos/{self.archivo}'
+
+    @property
+    def portada(self) -> str | None:
+        jpg = Path(self.archivo).stem + '.jpg'
+        return f'/fotos/{jpg}' if (FOTOS / jpg).is_file() else None
+
+    @property
+    def existe(self) -> bool:
+        return (FOTOS / self.archivo).is_file()
+
+
+@dataclass
 class Entrada:
     slug: str
     titulo: str
@@ -72,6 +93,7 @@ class Entrada:
     borrador: bool
     texto: str
     bloques: list = field(default_factory=list)
+    novedad: bool = False
 
     @property
     def nombre_categoria(self) -> str:
@@ -108,6 +130,7 @@ _LINK = re.compile(r'\[([^\]]+)\]\(((?:https?://|mailto:|/)[^\s)]+)\)')
 _NEGRITA = re.compile(r'\*\*(.+?)\*\*')
 _CURSIVA = re.compile(r'(?<![\w*])\*(?!\s)(.+?)(?<!\s)\*(?![\w*])')
 _FOTO = re.compile(r'^\[foto:\s*([^|\]]+?)\s*(?:\|\s*(.*?))?\s*\]$')
+_VIDEO = re.compile(r'^\[video:\s*([^|\]]+?\.mp4)\s*(?:\|\s*(.*?))?\s*\]$', re.I)
 
 
 def en_linea(texto: str) -> Markup:
@@ -161,6 +184,9 @@ def parsear_cuerpo(texto: str) -> list:
         elif (m := _FOTO.match(limpia)):
             cerrar_parrafo()
             bloques.append(('foto', Foto(Path(m[1]).name, m[2] or '')))
+        elif (m := _VIDEO.match(limpia)):
+            cerrar_parrafo()
+            bloques.append(('video', Video(Path(m[1]).name, m[2] or '')))
         elif limpia.startswith('>'):
             cerrar_parrafo()
             if bloques and bloques[-1][0] == 'cita':
@@ -206,16 +232,17 @@ def leer_entrada(ruta: Path) -> Entrada | None:
         fecha=fecha,
         categoria=datos.get('categoria', 'fragmentos').lower(),
         borrador=datos.get('estado', '').lower() == 'borrador',
+        novedad=datos.get('novedad', '').lower() in ('si', 'sí', 'true'),
         texto=cuerpo.strip(),
         bloques=parsear_cuerpo(cuerpo),
     )
 
 
-def serializar(titulo: str, fecha: date, categoria: str, borrador: bool, texto: str) -> str:
+def serializar(titulo: str, fecha: date, categoria: str, borrador: bool, texto: str, novedad: bool = False) -> str:
     titulo = ' '.join(titulo.split())
     estado = 'borrador' if borrador else 'publicado'
     return (f'titulo: {titulo}\nfecha: {fecha.isoformat()}\ncategoria: {categoria}\n'
-            f'estado: {estado}\n---\n{texto.strip()}\n')
+            f'estado: {estado}\n' + ('novedad: si\n' if novedad else '') + f'---\n{texto.strip()}\n')
 
 
 # ---------- Cache: se relee solo cuando cambia algun archivo ----------
@@ -235,6 +262,11 @@ def todas(incluir_borradores: bool = False) -> list[Entrada]:
     if incluir_borradores:
         return list(_cache['entradas'])
     return [e for e in _cache['entradas'] if not e.borrador]
+
+
+def novedad() -> Entrada | None:
+    """La entrada publicada mas reciente marcada como novedad y que tenga al menos una foto."""
+    return next((e for e in todas() if e.novedad and e.fotos), None)
 
 
 def buscar(slug: str, incluir_borradores: bool = False) -> Entrada | None:

@@ -141,13 +141,21 @@ async def error_http(request: Request, exc: StarletteHTTPException):
 @app.get('/', response_class=HTMLResponse)
 def inicio(request: Request):
     entradas = ct.todas()
-    return render(
+    # La novedad se muestra una sola vez por visitante: una cookie recuerda cual ya vio
+    nueva = ct.novedad()
+    if nueva and request.cookies.get('novedad_vista') == nueva.slug:
+        nueva = None
+    respuesta = render(
         request, 'inicio.html',
         recientes=entradas[:6],
         cita=random.choice(CITAS),
         categorias=categorias_publicas(),
         total=len(entradas),
+        novedad=nueva,
     )
+    if nueva:
+        respuesta.set_cookie('novedad_vista', nueva.slug, max_age=60 * 60 * 24 * 365, samesite='lax', httponly=True)
+    return respuesta
 
 
 @app.get('/bitacora', response_class=HTMLResponse)

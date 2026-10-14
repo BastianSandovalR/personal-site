@@ -83,6 +83,7 @@
             <tr><td><tt>---</tt></td><td>un separador</td></tr>
             <tr><td><tt>```</tt> antes y después</td><td>un bloque de código</td></tr>
             <tr><td><tt>[foto: archivo.jpg | pie]</tt></td><td>una foto con su pie</td></tr>
+            <tr><td><tt>[video: archivo.mp4 | pie]</tt></td><td>un video (se sube al servidor aparte)</td></tr>
         </table>
     </details>
     <br>
@@ -94,6 +95,9 @@
 
     <input type="checkbox" id="borrador" name="borrador" value="true"{% if entrada and entrada.borrador %} checked{% endif %}>
     <label for="borrador">Guardar como borrador (no se publica)</label>
+    <br>
+    <input type="checkbox" id="novedad" name="novedad" value="true"{% if entrada and entrada.novedad %} checked{% endif %}>
+    <label for="novedad">Mostrar como novedad: aparece en una ventana al entrar a la portada (usa la primera foto)</label>
     <br><br>
 
     <input type="submit" value="{{ 'Guardar cambios' if entrada else 'Guardar entrada' }}">
