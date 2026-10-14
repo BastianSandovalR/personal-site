@@ -2,65 +2,42 @@
 {% import '_macros.html' as m with context %}
 
 {% block contenido %}
-{% if novedad %}
+{# LO ÚLTIMO: franja compacta con la entrada marcada como novedad. Va justo debajo del dibujo. #}
+{% macro lo_ultimo() %}
 {% set foto = novedad.fotos[0] %}
 {% set n_fotos = novedad.fotos | length %}
 {% set n_videos = novedad.videos | length %}
 {% set enlace = '/entrada/' ~ novedad.slug %}
-{% macro resumen_novedad() %}
-    <tt><font size="2" color="{{ c.tenue }}">Lo último, {{ novedad.fecha_larga }}</font></tt>
-    <h2><font color="{{ c.titulo }}" size="{{ 5 if movil else 6 }}">{{ novedad.titulo }}</font></h2>
-    {% if novedad.resumen %}<font size="{{ 3 if movil else 4 }}">{{ novedad.resumen }}</font><br><br>{% endif %}
-    <font size="4"><b><a href="{{ enlace }}">Ver {{ n_fotos }} foto{{ 's' if n_fotos != 1 }}{% if n_videos %} y {{ n_videos }} video{{ 's' if n_videos != 1 }}{% endif %}</a></b></font>
-{% endmacro %}
-{# Rollo: el resto de las fotos y las portadas de los videos, todas a la misma altura #}
-{% macro rollo() %}
-    {% set alto = 96 if movil else 130 %}
-    <table cellpadding="0" cellspacing="{{ 4 if movil else 6 }}" border="0"><tr>
-    {% for f in novedad.fotos[1:] %}
-        <td valign="top" align="center"><a href="{{ enlace }}"><img src="{{ f.url_miniatura }}" height="{{ alto }}" alt="{{ f.pie or novedad.titulo }}" border="0"></a></td>
-    {% endfor %}
-    {% for v in novedad.videos if v.portada %}
-        <td valign="top" align="center"><a href="{{ enlace }}"><img src="{{ v.portada }}" height="{{ alto }}" alt="Video: {{ v.pie or novedad.titulo }}" border="0"></a><br>
-        <tt><font size="1" color="{{ c.tenue }}">&#9654; video</font></tt></td>
-    {% endfor %}
-    </tr></table>
-{% endmacro %}
-
-<!-- LO ÚLTIMO: la entrada marcada como novedad, primero que todo -->
-<br>
-<table width="100%" border="2" cellpadding="0" cellspacing="0" bgcolor="{{ c.panel }}">
+{% set alto = 52 if movil else 64 %}
+<table width="{{ '100%' if movil else 600 }}" border="2" cellpadding="0" cellspacing="0" bgcolor="{{ c.panel }}">
     <tr>
         <td bgcolor="{{ c.barra }}">
-            <table width="100%" cellpadding="4" cellspacing="0" border="0"><tr><td>
+            <table width="100%" cellpadding="3" cellspacing="0" border="0"><tr><td align="left">
                 <font color="{{ c.barra_texto }}" size="2"><tt><b>lo_ultimo/</b></tt></font>
             </td></tr></table>
         </td>
     </tr>
     <tr>
         <td>
-            {% if movil %}
-            <table width="100%" cellpadding="8" cellspacing="0" border="0"><tr><td>
-                <a href="{{ enlace }}"><img src="{{ foto.url }}" width="100%" alt="{{ foto.pie or novedad.titulo }}" border="0"></a>
-                {{ resumen_novedad() }}
-                <br><br>
-                {{ rollo() }}
-            </td></tr></table>
-            {% else %}
-            <table width="100%" cellpadding="12" cellspacing="0" border="0">
-                <tr>
-                    <td width="330" valign="top" rowspan="2"><a href="{{ enlace }}"><img src="{{ foto.url }}" width="330" alt="{{ foto.pie or novedad.titulo }}" border="0"></a></td>
-                    <td valign="top">{{ resumen_novedad() }}</td>
-                </tr>
-                <tr>
-                    <td valign="bottom">{{ rollo() }}</td>
-                </tr>
-            </table>
-            {% endif %}
+            <table width="100%" cellpadding="{{ 6 if movil else 8 }}" cellspacing="0" border="0"><tr>
+                <td width="{{ 100 if movil else 150 }}" valign="top">
+                    <a href="{{ enlace }}"><img src="{{ foto.url_miniatura }}" width="{{ 100 if movil else 150 }}" alt="{{ foto.pie or novedad.titulo }}" border="0"></a>
+                </td>
+                <td valign="top" align="left">
+                    <tt><font size="1" color="{{ c.tenue }}">{{ novedad.fecha_larga }}</font></tt><br>
+                    <font size="{{ 3 if movil else 4 }}" color="{{ c.titulo }}"><b>{{ novedad.titulo }}</b></font><br>
+                    <font size="2"><a href="{{ enlace }}">Ver {{ n_fotos }} foto{{ 's' if n_fotos != 1 }}{% if n_videos %} y {{ n_videos }} video{{ 's' if n_videos != 1 }}{% endif %}</a></font>
+                    <br><br>
+                    {# Rollo: el resto de las fotos y las portadas de los videos, todas a la misma altura #}
+                    {% for f in novedad.fotos[1:] %}<a href="{{ enlace }}"><img src="{{ f.url_miniatura }}" height="{{ alto }}" alt="{{ f.pie or novedad.titulo }}" border="0" hspace="1"></a>{% endfor %}
+                    {%- for v in novedad.videos if v.portada %}<a href="{{ enlace }}"><img src="{{ v.portada }}" height="{{ alto }}" alt="Video: {{ v.pie or novedad.titulo }}" border="0" hspace="1"></a>{% endfor %}
+                    {% if n_videos %}<br><tt><font size="1" color="{{ c.tenue }}">{% if n_videos == 1 %}la última es un video{% else %}las últimas {{ n_videos }} son videos{% endif %}</font></tt>{% endif %}
+                </td>
+            </tr></table>
         </td>
     </tr>
 </table>
-{% endif %}
+{% endmacro %}
 <br>
 <center>
     <!-- CUADRÍCULA 2D: recreación del dibujo de la infancia. Sol, aves, cerros y el río. -->
@@ -116,6 +93,10 @@
         y autor de esta bitácora. Escribo desde la Región del Biobío.
     </font>
     <br><br>
+    {% if novedad %}
+    {{ lo_ultimo() }}
+    <br>
+    {% endif %}
     <marquee width="{{ '100%' if movil else '60%' }}" scrollamount="4"><tt><font color="{{ c.tenue }}">
         Ingeniería | Calistenia | Heavy Metal | Plant-based | Vida en el Biobío
     </font></tt></marquee>
@@ -148,7 +129,7 @@
     <p><i>"La eficiencia también aplica al hardware biológico."</i></p>
     <tt><font size="2">
         <b>&gt; COMBUSTIBLE:</b> 100% Plant-Based.<br>
-        <b>&gt; ENTRENAMIENTO:</b> Calistenia y boxeo.<br>
+        <b>&gt; ENTRENAMIENTO:</b> Calistenia.<br>
         <b>&gt; ENTORNO:</b> Trekking y rutas por la Región del Biobío.
     </font></tt>
     <p><font size="4"><b><a href="/bitacora">Leer la bitácora</a></b></font><br>
