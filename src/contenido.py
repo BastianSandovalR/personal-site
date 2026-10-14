@@ -6,7 +6,7 @@ Formato de un archivo (ver contenido/COMO_PUBLICAR.md):
     fecha: 2026-09-08
     categoria: bitacoras
     estado: publicado          (o "borrador")
-    novedad: si                (opcional: aparece como ventana al entrar a la portada)
+    novedad: si                (opcional: aparece destacada arriba en la portada)
     ---
     Texto con **negrita**, *cursiva*, `codigo` y [links](https://...).
 
@@ -110,6 +110,10 @@ class Entrada:
     @property
     def fotos(self) -> list[Foto]:
         return [b[1] for b in self.bloques if b[0] == 'foto' and (FOTOS / b[1].archivo).is_file()]
+
+    @property
+    def videos(self) -> list[Video]:
+        return [b[1] for b in self.bloques if b[0] == 'video' and b[1].existe]
 
     @property
     def resumen(self) -> str:

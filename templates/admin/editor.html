@@ -97,7 +97,7 @@
     <label for="borrador">Guardar como borrador (no se publica)</label>
     <br>
     <input type="checkbox" id="novedad" name="novedad" value="true"{% if entrada and entrada.novedad %} checked{% endif %}>
-    <label for="novedad">Mostrar como novedad: aparece en una ventana al entrar a la portada (usa la primera foto)</label>
+    <label for="novedad">Mostrar como novedad: aparece destacada arriba en la portada, con la primera foto grande y el resto en miniatura</label>
     <br><br>
 
     <input type="submit" value="{{ 'Guardar cambios' if entrada else 'Guardar entrada' }}">

@@ -4,53 +4,62 @@
 {% block contenido %}
 {% if novedad %}
 {% set foto = novedad.fotos[0] %}
-{#
-    Ventana flotante sin CSS ni JavaScript: <dialog open> la dibuja el navegador encima de la página,
-    y un botón dentro de <form method="dialog"> la cierra. El servidor solo la manda una vez por visitante.
-#}
-<dialog open aria-labelledby="novedad-titulo">
-    <table width="{{ 290 if movil else 600 }}" cellpadding="0" cellspacing="0" border="0" bgcolor="{{ c.panel }}">
-        <tr>
-            <td bgcolor="{{ c.barra }}">
-                <table width="100%" cellpadding="5" cellspacing="0" border="0"><tr>
-                    <td><font color="{{ c.barra_texto }}" size="2"><tt><b>novedad.jpg</b></tt></font></td>
-                    <td align="right"><form method="dialog"><button aria-label="Cerrar">x</button></form></td>
-                </tr></table>
-            </td>
-        </tr>
-        <tr>
-            <td align="center">
-                {# El dialog no hereda el color de texto de la página: se fija aquí para que el modo noche se lea #}
-                <font color="{{ c.texto }}">
-                {% macro texto_novedad() %}
-                    <h2 id="novedad-titulo"><font color="{{ c.titulo }}">{{ novedad.titulo }}</font></h2>
-                    {% if foto.pie %}<font size="2"><i>{{ foto.pie }}</i></font><br><br>{% endif %}
-                    <font size="4"><b><a href="/entrada/{{ novedad.slug }}">Ver las fotos y videos</a></b></font>
-                    <br><br>
-                    <form method="dialog"><button>Cerrar y seguir al sitio</button></form>
-                {% endmacro %}
-                {% set imagen %}<a href="/entrada/{{ novedad.slug }}"><img src="{{ foto.url }}" alt="{{ foto.pie or novedad.titulo }}" border="0" width="{{ 266 if movil else 300 }}"></a>{% endset %}
-                {% if movil %}
-                <table width="100%" cellpadding="8" cellspacing="0" border="0"><tr><td align="center">
-                    <tt><font size="2" color="{{ c.tenue }}">Lo último en la bitácora</font></tt><br><br>
-                    {{ imagen }}
-                    {{ texto_novedad() }}
-                </td></tr></table>
-                {% else %}
-                {# En PC va horizontal (foto | texto) para que quepa entera en la pantalla de un notebook #}
-                <table width="100%" cellpadding="12" cellspacing="0" border="0"><tr>
-                    <td valign="top">{{ imagen }}</td>
-                    <td valign="middle" align="left">
-                        <tt><font size="2" color="{{ c.tenue }}">Lo último en la bitácora</font></tt>
-                        {{ texto_novedad() }}
-                    </td>
-                </tr></table>
-                {% endif %}
-                </font>
-            </td>
-        </tr>
-    </table>
-</dialog>
+{% set n_fotos = novedad.fotos | length %}
+{% set n_videos = novedad.videos | length %}
+{% set enlace = '/entrada/' ~ novedad.slug %}
+{% macro resumen_novedad() %}
+    <tt><font size="2" color="{{ c.tenue }}">Lo último, {{ novedad.fecha_larga }}</font></tt>
+    <h2><font color="{{ c.titulo }}" size="{{ 5 if movil else 6 }}">{{ novedad.titulo }}</font></h2>
+    {% if novedad.resumen %}<font size="{{ 3 if movil else 4 }}">{{ novedad.resumen }}</font><br><br>{% endif %}
+    <font size="4"><b><a href="{{ enlace }}">Ver {{ n_fotos }} foto{{ 's' if n_fotos != 1 }}{% if n_videos %} y {{ n_videos }} video{{ 's' if n_videos != 1 }}{% endif %}</a></b></font>
+{% endmacro %}
+{# Rollo: el resto de las fotos y las portadas de los videos, todas a la misma altura #}
+{% macro rollo() %}
+    {% set alto = 96 if movil else 130 %}
+    <table cellpadding="0" cellspacing="{{ 4 if movil else 6 }}" border="0"><tr>
+    {% for f in novedad.fotos[1:] %}
+        <td valign="top" align="center"><a href="{{ enlace }}"><img src="{{ f.url_miniatura }}" height="{{ alto }}" alt="{{ f.pie or novedad.titulo }}" border="0"></a></td>
+    {% endfor %}
+    {% for v in novedad.videos if v.portada %}
+        <td valign="top" align="center"><a href="{{ enlace }}"><img src="{{ v.portada }}" height="{{ alto }}" alt="Video: {{ v.pie or novedad.titulo }}" border="0"></a><br>
+        <tt><font size="1" color="{{ c.tenue }}">&#9654; video</font></tt></td>
+    {% endfor %}
+    </tr></table>
+{% endmacro %}
+
+<!-- LO ÚLTIMO: la entrada marcada como novedad, primero que todo -->
+<br>
+<table width="100%" border="2" cellpadding="0" cellspacing="0" bgcolor="{{ c.panel }}">
+    <tr>
+        <td bgcolor="{{ c.barra }}">
+            <table width="100%" cellpadding="4" cellspacing="0" border="0"><tr><td>
+                <font color="{{ c.barra_texto }}" size="2"><tt><b>lo_ultimo/</b></tt></font>
+            </td></tr></table>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            {% if movil %}
+            <table width="100%" cellpadding="8" cellspacing="0" border="0"><tr><td>
+                <a href="{{ enlace }}"><img src="{{ foto.url }}" width="100%" alt="{{ foto.pie or novedad.titulo }}" border="0"></a>
+                {{ resumen_novedad() }}
+                <br><br>
+                {{ rollo() }}
+            </td></tr></table>
+            {% else %}
+            <table width="100%" cellpadding="12" cellspacing="0" border="0">
+                <tr>
+                    <td width="330" valign="top" rowspan="2"><a href="{{ enlace }}"><img src="{{ foto.url }}" width="330" alt="{{ foto.pie or novedad.titulo }}" border="0"></a></td>
+                    <td valign="top">{{ resumen_novedad() }}</td>
+                </tr>
+                <tr>
+                    <td valign="bottom">{{ rollo() }}</td>
+                </tr>
+            </table>
+            {% endif %}
+        </td>
+    </tr>
+</table>
 {% endif %}
 <br>
 <center>
