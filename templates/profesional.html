@@ -2,7 +2,7 @@
 
 {% block titulo %}Bastian Sandoval | Ingeniero en formación: datos, Edge Computing y TinyML{% endblock %}
 {% block og_tipo %}profile{% endblock %}
-{% block descripcion %}Bastian Sandoval: estudiante de último año de Ingeniería Civil en Informática (USM). Datos, Edge Computing y TinyML. Proyectos, experiencia y contacto.{% endblock %}
+{% block descripcion %}Bastian Sandoval: estudiante de último año de Ingeniería en Informática (USM). Datos, Edge Computing y TinyML. Proyectos, experiencia y contacto.{% endblock %}
 
 {#
     Página para reclutadores: sin marquesinas, sin música, sin chistes de terminal.
@@ -87,14 +87,14 @@
 {# itemscope/itemprop: datos estructurados (schema.org) escritos como atributos HTML, sin <script> #}
 <tr><td align="left" itemscope itemtype="https://schema.org/Person">
     <link itemprop="url" href="{{ sitio }}/profesional">
-    <meta itemprop="jobTitle" content="Estudiante de Ingeniería Civil en Informática">
+    <meta itemprop="jobTitle" content="Estudiante de Ingeniería en Informática">
     <meta itemprop="knowsAbout" content="Edge Computing, TinyML, ingeniería de datos, machine learning, FastAPI, Python">
 
     <!-- ENCABEZADO -->
     <br>
     <h1><font size="{{ 6 if movil else 7 }}"><span itemprop="name">Bastian Sandoval</span></font></h1>
     <font size="{{ 3 if movil else 4 }}">
-        Estudiante de último año de Ingeniería Civil en Informática (USM).<br>
+        Estudiante de último año de Ingeniería en Informática (USM).<br>
         Trabajo con datos, Edge Computing y TinyML.
     </font>
     <br><br>
@@ -141,7 +141,7 @@
     {{ seccion('Formación') }}
     <table width="100%" cellpadding="{{ 6 if movil else 8 }}" cellspacing="0" border="0">
         {% call fila('En curso') %}
-            <b>Ingeniería Civil en Informática</b>, <span itemprop="alumniOf">Universidad Técnica Federico Santa María</span>, Concepción<br>
+            <b>Ingeniería en Informática</b>, <span itemprop="alumniOf">Universidad Técnica Federico Santa María</span>, Concepción<br>
             Último año. Memoria de título en TinyML.
         {% endcall %}
     </table>
